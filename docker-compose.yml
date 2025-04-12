@@ -6,7 +6,7 @@ services:
     container_name: app
     build:
         context: .
-        dockerfile:  docker/Dockerfile
+        dockerfile:  ./docker/php/Dockerfile
     restart: unless-stopped
     working_dir: /var/www
     ports:
@@ -14,7 +14,7 @@ services:
     volumes:
         - ./:/var/www
     depends_on:
-        - db
+        - postgres
         - redis
     networks:
         - teach-smith-api
@@ -72,7 +72,7 @@ services:
     image: mailhog/mailhog
     container_name: mailhog
     ports:
-      - "8025:8025" # UI Web
+      - "8025:8025"
     networks:
       - teach-smith-api
 
