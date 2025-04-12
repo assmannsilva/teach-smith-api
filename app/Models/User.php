@@ -29,6 +29,7 @@ class User extends Authenticatable
         "first_name_index",
         "surname_tokens",
         "role",
+        "active"
     ];
 
     /**
@@ -53,7 +54,8 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
-            "role" => RolesEnum::class
+            "role" => RolesEnum::class,
+            "active" => 'boolean',
         ];
     }
 
@@ -80,6 +82,11 @@ class User extends Authenticatable
     public function organization()
     {
         return $this->belongsTo(Organization::class);
+    }
+
+    public function teacher()
+    {
+        return $this->hasOne(Teacher::class);
     }
 
 

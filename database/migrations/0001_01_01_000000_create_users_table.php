@@ -13,6 +13,8 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->uuid("id")->primary();
+            $table->rememberToken();
+            $table->timestamps();
             $table->string('first_name',1024);
             $table->string('surname',1024);
             $table->string('first_name_index')->index()->nullable();
@@ -21,11 +23,11 @@ return new class extends Migration
             $table->string('email',1024)->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->rememberToken();
-            $table->timestamps();
             $table->string('provider')->nullable();
             $table->string('provider_id',1024)->nullable();
-            $table->foreignUuid("organization_id");
+            $table->foreignUuid("organization_id")->nullable();
+            $table->boolean("master")->default(false);
+            $table->boolean("active")->default(true);
         });
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {

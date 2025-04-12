@@ -134,6 +134,9 @@ return [
             "name" => env("SODIUM_ORGANIZATION_NAME_SECRET_KEY"),
             "name_index" => env("SODIUM_ORGANIZATION_NAME_INDEX_SECRET_KEY"),
         ],
+        "teachers" => [
+            "cpf" => env("SODIUM_CPF_SECRET_KEY"),
+        ]
     ]
 
 ];
