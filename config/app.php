@@ -123,4 +123,17 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
+    "crypted_columns" => [
+        "users" => [
+            "first_name" => env("SODIUM_FIRST_NAME_SECRET_KEY"),
+            "surname" => env("SODIUM_SURNAME_SECRET_KEY"),
+            "email" => env("SODIUM_EMAIL_SECRET_KEY"),
+            "provider_id" => env("SODIUM_PROVIDER_ID_SECRET_KEY"),
+        ],
+        "organizations" => [
+            "name" => env("SODIUM_ORGANIZATION_NAME_SECRET_KEY"),
+            "name_index" => env("SODIUM_ORGANIZATION_NAME_INDEX_SECRET_KEY"),
+        ],
+    ]
+
 ];
