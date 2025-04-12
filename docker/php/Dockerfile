@@ -1,10 +1,14 @@
-FROM php:8.4
+FROM php:8.4-fpm
+
+ARG user=user
+ARG uid=1000
 
 RUN apt-get update && apt-get install -y \
     build-essential \
     libpng-dev \
     libjpeg62-turbo-dev \
     libfreetype6-dev \
+    libpq-dev \  
     locales \
     zip \
     jpegoptim optipng pngquant gifsicle \
@@ -15,16 +19,17 @@ RUN apt-get update && apt-get install -y \
 
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
+RUN useradd -G www-data,root -u $uid -d /home/$user $user
+RUN mkdir -p /home/$user/.composer && \
+    chown -R $user:$user /home/$user
+
 WORKDIR /var/www
 
 COPY . .
-
-# Instala dependências PHP
+COPY --chown=$user:$user . /var/www     
 RUN composer install --optimize-autoloader --no-dev
 
-# Dá permissões
-RUN chown -R www-data:www-data /var/www \
-    && chmod -R 775 /var/www/storage
+USER $user
 
 EXPOSE 9000
 CMD ["php-fpm"]
