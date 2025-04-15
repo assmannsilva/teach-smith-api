@@ -12,7 +12,11 @@ class Organization extends Model
 {
     use HasUuids,HasFactory, HasEncrypt;
 
-    protected $fillable = [ "name", "name_index"];
+    protected $fillable = [
+        "name", 
+        "name_index",
+        "logo_url"
+    ];
 
     protected function name(): Attribute
     {

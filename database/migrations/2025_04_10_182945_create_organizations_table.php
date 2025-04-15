@@ -15,6 +15,7 @@ return new class extends Migration
             $table->uuid("id")->primary();
             $table->timestamps();
             $table->string("name",1024);
+            $table->string("logo_url")->nullable();
             $table->string("name_index")->index();
         });
     }
