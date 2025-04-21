@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Support\Repositories;
+namespace App\Repositories;
 
 use Illuminate\Database\Eloquent\Builder as EloquentQueryBuilder;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
@@ -63,7 +63,7 @@ abstract class BaseRepository
    * Retrieves a record by his id
    * @param string  $id
    * @param bool $fail
-   * @return Model
+   * @return mixed
    */
   protected function findById(String $id, bool $fail = true)
   {

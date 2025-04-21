@@ -45,3 +45,5 @@ function something()
 {
     // ..
 }
+
+uses(Tests\TestCase::class,)->in('Feature', 'Unit');

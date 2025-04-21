@@ -25,7 +25,7 @@ class OrganizationService {
 
         return $this->organization_repository->create([
             'name' => $organization_name,
-            'logo_path' => $logo_path,
+            'logo_url' => $logo_path,
         ]);
     }
     /**
