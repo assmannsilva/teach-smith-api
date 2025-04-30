@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Users;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Users\RegisterAdminUserRequest;
-use App\Services\UserService;
+use App\Services\User\UserService;
 
 class RegisterAdminUserController extends Controller
 {
