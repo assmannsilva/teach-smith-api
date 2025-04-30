@@ -22,7 +22,7 @@ return new class extends Migration
             $table->string('role');
             $table->string('email',1024)->unique();
             $table->timestamp('email_verified_at')->nullable();
-            $table->string('password');
+            $table->string('password')->nullable();
             $table->string('provider')->nullable();
             $table->string('provider_id',1024)->nullable();
             $table->foreignUuid("organization_id")->nullable();
