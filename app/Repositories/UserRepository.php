@@ -10,25 +10,11 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface {
 
     protected $modelClass = User::class;
 
-    /**
-     * Find an user by its ID.
-     * @param String $id
-     * @return Organization
-     * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
-     */
-    public function find(String $id) : User
+    public function getExistingEmails(array $emails) : array
     {
-        return $this->findById($id);
+        return $this->newQuery()
+        ->whereIn('email', $emails)
+        ->pluck("email")
+        ->toArray();
     }
-
-    /**
-     * Creates a new User
-     * @param Array $insert_data
-     * @return User
-     */
-    public function create(Array $insert_data) : User
-    {
-        return User::create($insert_data);
-    }
-
 }
