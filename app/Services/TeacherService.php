@@ -22,7 +22,7 @@ class TeacherService {
      * @param array{
      *   email: string,
      *   first_name: string,
-     *   last_name: string,
+     *   surname: string,
      *   organization_id: int,
      *   cpf: string,
      *   degree: string,
@@ -36,7 +36,7 @@ class TeacherService {
             $user = $this->user_repository_interface->create([
                 'email' => $insert_data['email'],
                 'first_name' => $insert_data['first_name'],
-                'last_name' => $insert_data['last_name'],
+                'surname' => $insert_data['surname'],
                 'organization_id' => $insert_data['organization_id'],
                 'role' => RolesEnum::TEACHER,
                 'active' => false,
