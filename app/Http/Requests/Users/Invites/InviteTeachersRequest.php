@@ -22,9 +22,9 @@ class InviteTeachersRequest extends FormRequest
             'teachers.*.email' => 'required|email',
             'teachers.*.cpf' => 'required|string|cpf',
             'teachers.*.first_name' => 'required|string|max:255',
-            'teachers.*.last_name' => 'required|string|max:255',
-            'teachers.*.education_level' => 'required|string',
-            'teachers.*.hiring_date' => 'required|date_format:Y-m-d',
+            'teachers.*.surname' => 'required|string|max:255',
+            'teachers.*.degree' => 'required|string',
+            'teachers.*.hire_date' => 'required|date_format:Y-m-d',
         ];
     }
 }
