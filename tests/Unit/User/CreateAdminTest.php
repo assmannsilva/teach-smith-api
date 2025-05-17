@@ -3,8 +3,8 @@
 use App\Enums\RolesEnum;
 use App\Models\Organization;
 use App\Models\User;
-use App\Services\UserService;
 use App\Repositories\UserRepository;
+use App\Services\User\UserService;
 
 uses(\Illuminate\Foundation\Testing\RefreshDatabase::class);
 

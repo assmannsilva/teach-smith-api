@@ -1,7 +1,6 @@
 <?php
 
 use App\Services\OrganizationService;
-use App\Repositories\Interfaces\OrganizationRepositoryInterface;
 use App\Services\LogoFileProcessorService;
 use App\Models\Organization;
 use App\Repositories\OrganizationRepository;
@@ -42,8 +41,6 @@ it('handles logo processing failure', function () {
         ->shouldReceive('processLogoImage')
         ->with($logoFile)
         ->andThrow(new \Exception('Logo processing failed'));
-
-    //$organizationRepositoryMock = Mockery::mock(OrganizationRepositoryInterface::class);
 
     $organizationService = new OrganizationService(
         new OrganizationRepository(),
