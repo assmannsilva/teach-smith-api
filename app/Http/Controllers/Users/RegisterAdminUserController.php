@@ -12,18 +12,9 @@ class RegisterAdminUserController extends Controller
         RegisterAdminUserRequest $request,
         UserService $user_service
     ){
-        try {
-            $user = $user_service->registerAdminUser($request->input());
-            return \response()->json([
-                'user' => $user
-            ],201);
-        }
-        catch (\Exception $e) {
-            return response()->json([
-                'message' => 'Error creating user',
-            ], 500);
-        }
-
-
+        $user = $user_service->registerAdminUser($request->input());
+        return \response()->json([
+            'user' => $user
+        ],201);
     }
 }
