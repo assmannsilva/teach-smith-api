@@ -2,12 +2,12 @@
 namespace App\Services;
 
 use Illuminate\Http\UploadedFile;
-use Intervention\Image\Format;
 use Intervention\Image\Laravel\Facades\Image;
 
 class LogoFileProcessorService {
 
     const IMAGE_LOGOS_STORE_PATH = 'logos/';
+    const IMAGE_LOGO_SIZE = 300;
 
     /**
      * Retrieve the storage path for logo images.
@@ -25,14 +25,23 @@ class LogoFileProcessorService {
      */
     public function processLogoImage(UploadedFile $file_request): String
     {
-        $image = Image::read($file_request)
-        ->resize(null, 100, function ($constraint) {
+        $resized = Image::read($file_request)
+        ->resize(self::IMAGE_LOGO_SIZE, self::IMAGE_LOGO_SIZE, function ($constraint) {
             $constraint->aspectRatio();
-        })->toPng();
+            $constraint->upsize();
+        })
+        ->toPng();
+
+        $canvas = Image::create(self::IMAGE_LOGO_SIZE, self::IMAGE_LOGO_SIZE)
+        ->fill('rgba(255, 255, 255, 0)') // transparente
+        ->place($resized, 'center')
+        ->toPng();
 
         $file_name = "logo_".time().".png";
         $storage_path = $this->getStoragePath().$file_name;
-        $image->save($storage_path, 100, Format::PNG);
+        
+        $canvas->save($storage_path);
+
         return $storage_path;
     }
 
