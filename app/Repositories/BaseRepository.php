@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use Illuminate\Database\Eloquent\Builder as EloquentQueryBuilder;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Pagination\AbstractPaginator as Paginator;
 
@@ -82,6 +83,28 @@ abstract class BaseRepository
 	public function create(Array $insert_data)
 	{
 		return $this->modelClass::create($insert_data);
+	}
+
+	/**
+	 * saves a record
+	 * @param Model $model
+	 * @return Model $model
+	 */
+	public function save(Model $model)
+	{
+		$model->save();
+		return $model;
+	}
+
+	/**
+	 * Updates a record
+	 * @param Model $model
+	 * @param array $update_data
+	 * @return bool
+	 */
+	public function update(Model $model ,array $update_data)
+	{
+		return $model->update($update_data);
 	}
 
 }
