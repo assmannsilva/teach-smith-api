@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\ProvidersEnum;
 use App\Enums\RolesEnum;
 use App\Models\Traits\HasEncrypt;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
@@ -56,6 +57,7 @@ class User extends Authenticatable
             'password' => 'hashed',
             "role" => RolesEnum::class,
             "active" => 'boolean',
+            "provider" => ProvidersEnum::class,
         ];
     }
 
