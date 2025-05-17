@@ -1,6 +1,7 @@
 <?php
 namespace App\Repositories;
 
+use App\Enums\ProvidersEnum;
 use App\Models\Organization;
 use App\Models\User;
 use App\Repositories\BaseRepository;
@@ -16,5 +17,22 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface {
         ->whereIn('email', $emails)
         ->pluck("email")
         ->toArray();
+    }
+
+    public function findByProviderCredentials(ProvidersEnum $provider, string $provider_id) : ?User
+    {
+        return $this->newQuery()
+        ->where('provider', $provider)
+        ->where('provider_id', $provider_id)
+        ->where("active",true)
+        ->first();
+    }
+
+    public function findByEmail(string $email) : ?User
+    {
+        return $this->newQuery()
+        ->where('email', $email)
+        ->where("active",true)
+        ->first();
     }
 }
