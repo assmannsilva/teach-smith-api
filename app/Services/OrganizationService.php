@@ -1,6 +1,7 @@
 <?php
 namespace App\Services;
 
+use App\Models\Organization;
 use App\Repositories\Interfaces\OrganizationRepositoryInterface;
 use Illuminate\Http\UploadedFile;
 
@@ -38,6 +39,19 @@ class OrganizationService {
         if ($logo_path) {
             $this->logoFileProcessorService->deleteLogoImage($logo_path);
         }
+    }
+
+      /**
+     * Finds the user from a crypted state from the external provider
+     * @param string $crypted_encoded_state
+     * @return Organization
+     */
+    public function findByCriptedState(string $crypted_encoded_state) : Organization
+    {
+        $state_decrypted = \json_decode(\base64_decode($crypted_encoded_state),\true);
+        if(!$state_decrypted) throw new ErrorException("teste");
+
+        return $this->organization_repository->find($state_decrypted["organization_id"]);
     }
 
     
