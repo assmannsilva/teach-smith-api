@@ -2,7 +2,7 @@
 
 namespace App\Lib\AuthStrategy;
 
-use App\Lib\LoginStrategy\Interfaces\AuthStrategyInterface;
+use App\Lib\AuthStrategy\Interfaces\AuthStrategyInterface;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
