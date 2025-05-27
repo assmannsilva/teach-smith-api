@@ -2,7 +2,7 @@
 
 namespace App\Lib\AuthStrategy\Traits;
 
-use Psy\Util\Str;
+use Illuminate\Support\Str;
 
 trait HasState
 {
@@ -12,9 +12,9 @@ trait HasState
      * armazena o estado
      * @return void
      */
-    private function storeState(): void
+    private function storeCsrfToken(string $csrf): void
     {
-        session()->put("state",$this->state);
+        session()->put("csrf_state_token",$csrf);
     }
     
     /**
@@ -22,20 +22,28 @@ trait HasState
      *
      * @return string
      */
-    public function generateState(): string
+    public function generateState(array $extras = []): string
     {
-        $this->state = Str::random(40);
-        $this->storeState();
+        $csrf = Str::random(40);
+        $this->state = base64_encode(\json_encode([
+            ...$extras,
+            "csrf" => $csrf
+        ]));
+
+        $this->storeCsrfToken($csrf);
         return $this->state;
     }
 
     public function checkState(string $state) : bool
     {
-        $session_state = session()->get("state");
-        if (!$session_state) return false;
+        $state_decoded = \json_decode(\base64_decode($state),\true);
+        $session_state = session()->get("csrf_state_token");
+        session()->forget("csrf_state_token");
+        if (!$session_state || !isset($state_decoded["csrf"])) return false;
         
-        return hash_equals($session_state, $state);
+        return hash_equals($session_state, $state_decoded["csrf"]);
     }
+    
 
 
 
