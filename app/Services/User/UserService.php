@@ -2,28 +2,27 @@
 
 namespace App\Services\User;
 
-use App\Enums\RolesEnum;
 use App\Models\User;
 use App\Repositories\Interfaces\UserRepositoryInterface;
-use Illuminate\Support\Facades\Hash;
+use ErrorException;
 
 class UserService {
 
     public function __construct(
-        protected UserRepositoryInterface $user_repository_interface
+        protected UserRepositoryInterface $userRepository
     ){}
     
     /**
-     * @param Array $insert_data
+     * Finds the user from a crypted state from the external provider
+     * @param string $crypted_encoded_state
      * @return User
      */
-    public function registerAdminUser($insert_data) : User
+    public function findByCriptedState(string $crypted_encoded_state) : User
     {
-        return $this->user_repository_interface->create([
-            ...$insert_data,
-            'password' => Hash::make($insert_data["password"]),
-            'active' => true,
-            'role' => RolesEnum::ADMIN,
-        ]);
+        $state_decrypted = \json_decode(\base64_decode($crypted_encoded_state));
+
+        if(!$state_decrypted) throw new ErrorException("teste");
+
+        return $this->userRepository->find($state_decrypted["user_id"]);
     }
 }
