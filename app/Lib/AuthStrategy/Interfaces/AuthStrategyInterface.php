@@ -1,5 +1,5 @@
 <?php
-namespace App\Lib\LoginStrategy\Interfaces;
+namespace App\Lib\AuthStrategy\Interfaces;
 
 use App\Models\User;
 

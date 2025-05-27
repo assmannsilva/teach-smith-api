@@ -1,11 +1,11 @@
 <?php
-namespace App\Lib\LoginStrategy\Interfaces;
+namespace App\Lib\AuthStrategy\Interfaces;
 
-use App\Models\User;
+use App\Enums\ProvidersActionsEnum;
 
 interface ExternalProviderInterface extends AuthStrategyInterface
 {
-    public function generateOAuthUrl() : string;
+    public function generateOAuthUrl(ProvidersActionsEnum $action, array $extras = []) : string;
 
     public function generateToken(string $code) : string;
 }
