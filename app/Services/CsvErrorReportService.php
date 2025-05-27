@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\User;
+namespace App\Services;
 use Psy\Util\Str;
 
 class CsvErrorReportService {
