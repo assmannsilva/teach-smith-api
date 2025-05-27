@@ -30,7 +30,7 @@ trait HasEncrypt {
      * Realiza a criptografia da coluna index de determinada coluna de referência
      * @return void
      */
-    protected function encryptColumnIndex(string $reference_column, string $index_column): void
+    public function encryptColumnIndex(string $reference_column, string $index_column): void
     {
         if($this->{$reference_column} === null) return;
         $crypt_index = SodiumCrypto::getCryptKey("app.crypted_columns.{$this->getTable()}.$index_column");

@@ -5,12 +5,15 @@ namespace App\Models;
 use App\Enums\ProvidersEnum;
 use App\Enums\RolesEnum;
 use App\Models\Traits\HasEncrypt;
+use App\Observers\UserObserver;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 
+#[ObservedBy([UserObserver::class])]
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
@@ -27,6 +30,7 @@ class User extends Authenticatable
         'email',
         'password',
         'organization_id',
+        "email_index",
         "first_name_index",
         "surname_tokens",
         "role",
@@ -43,6 +47,7 @@ class User extends Authenticatable
         'remember_token',
         'provider',
         'provider_id',
+        "email"
     ];
 
     /**
@@ -75,11 +80,6 @@ class User extends Authenticatable
     {
         return Attribute::make(...$this->makeEncryptedAttributeCallables('email'));
     }
-
-    protected function providerId(): Attribute
-    {
-        return Attribute::make(...$this->makeEncryptedAttributeCallables('provider_id'));
-    } 
 
     public function organization()
     {

@@ -2,6 +2,7 @@
 namespace App\Repositories;
 
 use App\Enums\ProvidersEnum;
+use App\Helpers\SodiumCrypto;
 use App\Models\Organization;
 use App\Models\User;
 use App\Repositories\BaseRepository;
@@ -30,8 +31,10 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface {
 
     public function findByEmail(string $email) : ?User
     {
+        $email_key_index = SodiumCrypto::getCryptKey("app.crypted_columns.users.email_index");
+        $email_index = SodiumCrypto::getIndex($email,$email_key_index);
         return $this->newQuery()
-        ->where('email', $email)
+        ->where('email_index', $email_index)
         ->where("active",true)
         ->first();
     }

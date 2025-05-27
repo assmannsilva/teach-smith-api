@@ -21,10 +21,11 @@ return new class extends Migration
             $table->json('surname_tokens')->nullable();
             $table->string('role');
             $table->string('email',1024)->unique();
+            $table->string('email_index')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password')->nullable();
             $table->string('provider')->nullable();
-            $table->string('provider_id',1024)->nullable();
+            $table->string('provider_id')->nullable();
             $table->foreignUuid("organization_id")->nullable();
             $table->boolean("master")->default(false);
             $table->boolean("active")->default(true);

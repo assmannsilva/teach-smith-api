@@ -128,7 +128,9 @@ return [
             "first_name" => env("SODIUM_FIRST_NAME_SECRET_KEY"),
             "surname" => env("SODIUM_SURNAME_SECRET_KEY"),
             "email" => env("SODIUM_EMAIL_SECRET_KEY"),
-            "provider_id" => env("SODIUM_PROVIDER_ID_SECRET_KEY"),
+            "surname_index" =>  env("SODIUM_SURNAME_INDEX_SECRET_KEY"),
+            "first_name_index" =>  env("SODIUM_FIRST_NAME_INDEX_SECRET_KEY"),
+            "email_index" =>  env("SODIUM_EMAIL_INDEX_SECRET_KEY"),
         ],
         "organizations" => [
             "name" => env("SODIUM_ORGANIZATION_NAME_SECRET_KEY"),

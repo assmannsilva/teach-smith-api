@@ -2,6 +2,7 @@
 
 namespace App\Observers;
 
+use App\Helpers\SodiumCrypto;
 use App\Models\User;
 
 class UserObserver
@@ -15,7 +16,7 @@ class UserObserver
     {
         if (empty($user->surname)) return;
 
-        $crypt_index = SodiumCrypto::getCryptKey("app.crypted_user_columns_keys.name_index");
+        $crypt_index = SodiumCrypto::getCryptKey("app.crypted_columns.users.surname_index");
 
         $surnames = explode(" ", $user->surname);
         $surnames_tokens = array_map(
@@ -34,5 +35,6 @@ class UserObserver
     {
         $this->encryptSurnameTokens($user);
         $user->encryptColumnIndex("first_name", "first_name_index");
+        $user->encryptColumnIndex("email", "email_index");
     }
 }
