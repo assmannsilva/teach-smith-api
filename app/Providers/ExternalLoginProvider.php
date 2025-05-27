@@ -18,7 +18,6 @@ class ExternalLoginProvider extends ServiceProvider
             $client = new Client();
             $client->setClientId(config('services.google.client_id'));
             $client->setClientSecret(config('services.google.client_secret'));
-            $client->setRedirectUri(config('services.google.redirect_uri'));
             return $client;
         });
 
