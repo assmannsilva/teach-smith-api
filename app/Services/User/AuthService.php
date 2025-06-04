@@ -24,11 +24,12 @@ class AuthService
     public function register(
         ?array $registration_data,
         string $new_credential,
+        string $state,
         AuthStrategyInterface $strategy
     ) {
-        $user = new User($registration_data);
+        $user = new User($registration_data ?? []);
         $user->role = RolesEnum::ADMIN;
-        $user = $strategy->makeRegistration($user, $new_credential);
+        $user = $strategy->makeRegistration($user, $new_credential,$state);
         return $user;
     }
 

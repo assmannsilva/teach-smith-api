@@ -61,6 +61,7 @@ class GoogleAuthController extends Controller
                 "organization_id" => $organization->id
             ],
             $request->input("code"),
+            $request->input("state"),
             $this->strategy
         );
         

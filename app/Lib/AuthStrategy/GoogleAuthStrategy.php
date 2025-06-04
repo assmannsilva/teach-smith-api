@@ -4,6 +4,9 @@ namespace App\Lib\AuthStrategy;
 
 use App\Enums\ProvidersActionsEnum;
 use App\Enums\ProvidersEnum;
+use App\Exceptions\InvalidStateRequestException;
+use App\Exceptions\InvalidTokenException;
+use App\Exceptions\UserAlreadyRegisteredException;
 use App\Lib\AuthStrategy\Traits\HasState;
 use App\Lib\AuthStrategy\Interfaces\ExternalProviderInterface;
 use App\Models\User;
@@ -72,7 +75,7 @@ class GoogleAuthStrategy implements ExternalProviderInterface {
      * Gera o token de acesso do Google
      * @param string $code
      * @return string
-     * @throws 
+     * @throws InvalidTokenException
      */
     public function generateToken(string $code) : string
     {   
@@ -80,7 +83,7 @@ class GoogleAuthStrategy implements ExternalProviderInterface {
         session()->forget("google_code_verifier");
 
         if (!isset($token['access_token'])) {
-            throw new \Exception('Erro ao obter token: ' . $token['error_description'] ?? 'Erro desconhecido');
+            throw new InvalidTokenException($token['error_description'] ?? 'Erro desconhecido');
         }
 
         return $token["access_token"];
@@ -97,8 +100,6 @@ class GoogleAuthStrategy implements ExternalProviderInterface {
         $access_token = $this->generateToken($credentials['code']);
         $google_user_data = $this->getUserInfo($access_token);
         $user = $this->userRepository->findByProviderCredentials(ProvidersEnum::GOOGLE, $google_user_data->id);
-        
-        if(!$user) dd($user,$google_user_data);
         
         Auth::login($user, $credentials['remember'] ?? false);
 
@@ -124,19 +125,23 @@ class GoogleAuthStrategy implements ExternalProviderInterface {
      * Registra o usuário com o método de autenticação do Google
      * @param User $user
      * @param string $auth_credential (code)
+     * @param string $state (dados extras e proteção CSRF)
      * @return User
-     * @throws 
+     * @throws UserAlreadyRegisteredException
+     * @throws InvalidStateRequestException
      */
-    public function makeRegistration(User $user, string $auth_credential): User
+    public function makeRegistration(User $user, string $auth_credential, ?string $state = \null): User
     {
+        if(!$this->checkState($state)) throw new InvalidStateRequestException;
+
         $this->setGoogleRedirectUri(ProvidersActionsEnum::REGISTER);
         $access_token = $this->generateToken($auth_credential);
         $google_user_data = $this->getUserInfo($access_token);
         
         $user = $this->completeUserData($user,$google_user_data);
 
-        if($this->userRepository->findByEmail($google_user_data->email)) {
-            throw new \Exception('Usuário já cadastrado');
+        if($user_finded = $this->userRepository->findByEmail($google_user_data->email)) {
+            throw new UserAlreadyRegisteredException($user_finded);
         }
 
         $this->userRepository->save($user);

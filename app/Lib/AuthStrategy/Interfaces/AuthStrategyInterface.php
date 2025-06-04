@@ -8,8 +8,9 @@ interface AuthStrategyInterface
     /**
      * @param User $user
      * @param string $auth_credential (senha ou code) 
+     * @param ?string $state (dados extras e proteção CSRF)
      */
-    public function makeRegistration(User $user, string $auth_credential) : User;
+    public function makeRegistration(User $user, string $auth_credential, ?string $state = null) : User;
 
     /**
      * @param array $credentials Dados necessários para autenticação (email/senha, ou code, etc.)
