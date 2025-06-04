@@ -47,7 +47,10 @@ class User extends Authenticatable
         'remember_token',
         'provider',
         'provider_id',
-        "email"
+        "email",
+        "surname_tokens",
+        "first_name_index",
+        "email_index",
     ];
 
     /**

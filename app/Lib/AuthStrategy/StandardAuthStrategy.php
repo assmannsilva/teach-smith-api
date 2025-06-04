@@ -4,6 +4,7 @@ namespace App\Lib\AuthStrategy;
 
 use App\Lib\AuthStrategy\Interfaces\AuthStrategyInterface;
 use App\Models\User;
+use App\Repositories\Interfaces\UserRepositoryInterface;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
@@ -20,7 +21,13 @@ class StandardAuthStrategy implements AuthStrategyInterface {
      */
     public function authenticate(array $credentials): bool
     {
-        return Auth::attempt($credentials);
+        $user = $this->userRepository->findByEmail($credentials['email'],true);
+        if($user && Hash::check($credentials["password"],$user->password)) {
+            Auth::login($user);
+            return true;
+        }
+
+        return false;
     }
     
     /**
@@ -31,6 +38,10 @@ class StandardAuthStrategy implements AuthStrategyInterface {
      */
     public function makeRegistration(User $user, string $auth_credential): User
     {
+        if($this->userRepository->findByEmail($user->email)) {
+            throw new \Exception('Usuário já cadastrado');
+        }
+
         $user->password = Hash::make($auth_credential);
         $this->userRepository->save($user);
         Auth::login($user);

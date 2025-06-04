@@ -13,7 +13,6 @@ trait HasEncrypt {
     {
         return [
             function ($value) use ($column) {
-                if ($this->isDirty($column)) return $value;
                 if (!$value) return null;
                 $crypt_key = SodiumCrypto::getCryptKey("app.crypted_columns.{$this->getTable()}.$column");
                 return SodiumCrypto::decrypt($value, $crypt_key);
