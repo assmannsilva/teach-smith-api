@@ -2,14 +2,19 @@
 
 namespace App\Exceptions;
 
+use App\Models\User;
 use Exception;
 
 class UserAlreadyRegisteredException extends Exception
 {
     
-    public function __construct($message = 'User already registered')
+    public function __construct(User $user)
     {
-        parent::__construct($message);
+        parent::__construct(
+            "User with email {$user->email} is already registered.",
+            409
+        );
+
     }
 
     public function render($request)

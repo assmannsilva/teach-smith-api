@@ -34,12 +34,13 @@ class StandardAuthStrategy implements AuthStrategyInterface {
      * Completa o registro do usuário com a senha fornecida
      * @param User $user
      * @param string $auth_credential Senha do usuário
+     * @param ?string $state (não utilizada nessa implementação)
      * @return User
      */
-    public function makeRegistration(User $user, string $auth_credential): User
+    public function makeRegistration(User $user, string $auth_credential, ?string $state = null): User
     {
-        if($this->userRepository->findByEmail($user->email)) {
-            throw new \Exception('Usuário já cadastrado');
+        if($user_finded = $this->userRepository->findByEmail($user->email)) {
+            throw new \App\Exceptions\UserAlreadyRegisteredException($user_finded);
         }
 
         $user->password = Hash::make($auth_credential);

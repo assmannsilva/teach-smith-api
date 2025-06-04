@@ -24,7 +24,7 @@ class AuthService
     public function register(
         ?array $registration_data,
         string $new_credential,
-        string $state,
+        ?string $state,
         AuthStrategyInterface $strategy
     ) {
         $user = new User($registration_data ?? []);
