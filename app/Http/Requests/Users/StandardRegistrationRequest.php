@@ -6,6 +6,11 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class StandardRegistrationRequest extends FormRequest
 {
+
+    public function wantsJson()
+    {
+        return true;
+    }
     /**
      * Determine if the user is authorized to make this request.
      */
@@ -22,7 +27,7 @@ class StandardRegistrationRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "email" => "required|email|unique:users,email",
+            "email" => "required|email",
             "password" => "required|string|min:8|max:255|confirmed",
             "first_name" => "required|string|max:255",
             "surname" => "required|string|max:255",

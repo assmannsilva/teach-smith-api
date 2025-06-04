@@ -32,6 +32,7 @@ class StandardAuthController extends Controller
         $user_registrated = $this->authService->register(
             $registration_data,
             $credential,
+            null,
             $this->strategy
         );
 
