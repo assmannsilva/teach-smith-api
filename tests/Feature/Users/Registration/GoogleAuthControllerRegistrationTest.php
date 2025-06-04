@@ -11,7 +11,7 @@ uses(\Illuminate\Foundation\Testing\RefreshDatabase::class);
 beforeEach(function() {
 });
 
-it('registers user through controller endpoint', function() {
+it('registers user through google auth endpoint', function() {
 
     $organization = Organization::factory()->create();
     $csrf = Str::random(40);
@@ -31,7 +31,7 @@ it('registers user through controller endpoint', function() {
 });
 
 
-it('cannot register due to invalid token', function() {
+it('cannot register via google due to invalid token', function() {
 
     $organization = Organization::factory()->create();
     $state = base64_encode(json_encode([
@@ -51,7 +51,7 @@ it('cannot register due to invalid token', function() {
     ]);
 });
 
-it('cannot register due to invalid state', function() {
+it('cannot register via google due to invalid state', function() {
 
     $organization = Organization::factory()->create();
     $state = base64_encode(json_encode([
@@ -71,21 +71,24 @@ it('cannot register due to invalid state', function() {
     ]);
 });
 
-it('cannot register due to user already registered', function() {
+it('cannot register via google due to user already registered', function() {
     $organization = Organization::factory()->create();
+    $user = User::factory()->create();
     $state = base64_encode(json_encode([
         "organization_id" => $organization->id,
         "csrf" => "invalid-csrf-token"
     ]));
 
     $auth_service = Mockery::mock(AuthService::class, [new UserService(new UserRepository)]);
-    $auth_service->shouldReceive('register')->andThrow(new \App\Exceptions\UserAlreadyRegisteredException());
+    $auth_service
+    ->shouldReceive('register')
+    ->andThrow(new \App\Exceptions\UserAlreadyRegisteredException($user));
     $this->app->instance(AuthService::class, $auth_service);
 
     $response = $this->get(route('google.auth.register.callback', ['state' => $state, 'code' => 'valid-code']));
     
     $response->assertStatus(409);
     $response->assertJson([
-        'error' => 'User already registered'
+        'error' =>  "User with email {$user->email} is already registered."
     ]);
 });
