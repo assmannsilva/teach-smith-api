@@ -91,11 +91,13 @@ class GoogleAuthStrategy implements ExternalProviderInterface {
 
     /**
      * Realiza a autenticação do usuário
-     * @param array $credentials
+     * @param array $credentials<code,state,remember>
      * @return bool
      */
     public function authenticate(array $credentials): bool
     {
+        if(!$this->checkState($credentials["state"])) throw new InvalidStateRequestException;
+        
         $this->setGoogleRedirectUri(ProvidersActionsEnum::LOGIN);
         $access_token = $this->generateToken($credentials['code']);
         $google_user_data = $this->getUserInfo($access_token);
