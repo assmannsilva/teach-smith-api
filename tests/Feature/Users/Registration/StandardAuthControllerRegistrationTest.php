@@ -8,7 +8,7 @@ use App\Services\User\UserService;
 
 uses(\Illuminate\Foundation\Testing\RefreshDatabase::class);
 
-it('registers user through controller endpoint', function() {
+it('registers user through standard-auth controller endpoint', function() {
     $organization = Organization::factory()->create();
     $auth_service = Mockery::mock(AuthService::class, [new UserService(new UserRepository)]);
     $auth_service->shouldReceive('register')->andReturn(User::factory()->create());
@@ -27,7 +27,7 @@ it('registers user through controller endpoint', function() {
     $response->assertJsonFragment(['message' => 'User registered successfully']);
 });
 
-it('cannot register user through controller endpoint due to invalid data', function() {
+it('cannot register user through standard-auth controller endpoint due to invalid data', function() {
     $response = $this->postJson(route('auth.register'),[
         'first_name' => 'Teste',
         'email' => "teste",
@@ -40,15 +40,9 @@ it('cannot register user through controller endpoint due to invalid data', funct
     $response->assertJsonValidationErrors(['email', 'password', 'organization_id']);
 });
 
-it('cannot register user through controller endpoint due to user already registered', function() {
-
-
+it('cannot register user through standard-auth controller endpoint due to user already registered', function() {
     $organization = Organization::factory()->create();
     $user = User::factory()->create(["email" => "teste@gmail.com"]);
-    $state = base64_encode(json_encode([
-        "organization_id" => $organization->id,
-        "csrf" => "invalid-csrf-token"
-    ]));
 
     $auth_service = Mockery::mock(AuthService::class, [new UserService(new UserRepository)]);
     $auth_service

@@ -1,10 +1,6 @@
 <?php
 
-use App\Enums\ProvidersEnum;
-use App\Exceptions\InvalidStateRequestException;
-use App\Exceptions\InvalidTokenException;
 use App\Exceptions\UserAlreadyRegisteredException;
-use App\Lib\AuthStrategy\GoogleAuthStrategy;
 use App\Lib\AuthStrategy\StandardAuthStrategy;
 use App\Services\User\AuthService;
 use App\Models\User;
