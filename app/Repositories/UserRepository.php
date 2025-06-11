@@ -19,8 +19,11 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface {
      */
     public function getExistingEmails(array $emails) : array
     {
+        $email_key_index = SodiumCrypto::getCryptKey("app.crypted_columns.users.email_index");
+        $emails_indexes = array_map(fn($email) => SodiumCrypto::getIndex($email, $email_key_index), $emails);
+
         return $this->newQuery()
-        ->whereIn('email', $emails)
+        ->whereIn('email_index', $emails_indexes)
         ->pluck("email")
         ->toArray();
     }

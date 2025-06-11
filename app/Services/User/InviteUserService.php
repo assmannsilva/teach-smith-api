@@ -2,51 +2,67 @@
 
 namespace App\Services\User;
 
+use App\Imports\TeachersImport;
 use App\Jobs\CreateUserRegistration;
 use App\Mail\InviteRegistration;
 use App\Models\User;
 use App\Repositories\Interfaces\UserRepositoryInterface;
-use App\Services\TeacherService;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\URL;
 
 class InviteUserService {
     
     public function __construct(
-        protected TeacherService $teacher_service,
-        protected UserRepositoryInterface $user_repository_interface
- 
+        protected UserRepositoryInterface $user_repository_interface,
+        protected TeachersImport $teachersImport
     ) { }
+
+    public function importUsers(UploadedFile $file, string $model_class_name)
+    {
+        $this->teachersImport->import($file);
+        $errors = $this->teachersImport->getDataErrors();
+        $valid_data = $this->teachersImport->getValidData();
+        $response = $this->dispatchInvites($valid_data,$model_class_name);
+        return [
+            'dispatched_count' => $response['dispatched_count'],
+            'duplicated_emails' => $response['duplicated_emails'],
+            'errors' => $errors,
+        ];
+    }
 
     /**
      * Dispatches the creation of users and returns the already registered emails (not created again).
      *
      * @param array $users
      * @param string $model_class_name
-     * @return array {dispatched_count, already_registered_count, duplicated_emails}
+     * @return array {dispatched_count, duplicated_emails}
      */
-    public function dispatchInvites(array $users, string $model_class_name) : array
+    public function dispatchInvites(array $users_raw_data, string $model_class_name) : array
     {
-        $emails = array_column($users, 'email');
+        $emails = array_column($users_raw_data, 'email');
         $existent_emails = $this->user_repository_interface->getExistingEmails($emails);
 
         $must_create_users = \array_filter(
-            $users,
+            $users_raw_data,
             fn($user) => !in_array($user['email'],$existent_emails)
         );
         
-        foreach($must_create_users as $user) CreateUserRegistration::dispatch($user,$model_class_name);
+        foreach($must_create_users as $user) {
+            CreateUserRegistration::dispatch($user,$model_class_name, Auth::user()->organization_id);
+        }
 
         return [
             "dispatched_count" => count($must_create_users),
-            "duplicated_emails_count" => count($existent_emails),
             "duplicated_emails" => $existent_emails,
         ];
     }
 
     public function invite(User $user) : void
     {
-        $complete_registration_url = URL::signedRoute('complete-registration', ['id' => $user->id]);
+        //$complete_registration_url = URL::signedRoute('complete-registration', ['id' => $user->id]);
+        $complete_registration_url = "https://google.com";
         Mail::to($user->email)->queue(new InviteRegistration($user,$complete_registration_url));
     }
 }
