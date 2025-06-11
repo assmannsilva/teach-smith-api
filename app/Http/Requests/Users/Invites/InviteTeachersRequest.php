@@ -17,14 +17,12 @@ class InviteTeachersRequest extends FormRequest
     public function rules()
     {
         return [
-            'teachers' => 'required|array|max:100',
-            'teachers.*.name' => 'required|string|max:255',
-            'teachers.*.email' => 'required|email',
-            'teachers.*.cpf' => 'required|string|cpf',
-            'teachers.*.first_name' => 'required|string|max:255',
-            'teachers.*.surname' => 'required|string|max:255',
-            'teachers.*.degree' => 'required|string',
-            'teachers.*.hire_date' => 'required|date_format:Y-m-d',
+            'email' => 'required|email',
+            'cpf' => 'required|string|cpf',
+            'first_name' => 'required|string|max:255',
+            'surname' => 'required|string|max:255',
+            'degree' => 'required|string',
+            'hire_date' => 'required|date_format:Y-m-d',
         ];
     }
 }
