@@ -51,6 +51,5 @@ class TeacherService {
         });
 
         return $teacher_transaction;
-       
     }
 }

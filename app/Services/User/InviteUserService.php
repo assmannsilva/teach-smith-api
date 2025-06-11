@@ -2,7 +2,7 @@
 
 namespace App\Services\User;
 
-use App\Imports\TeachersImport;
+use App\Imports\Interfaces\BaseImportInterface;
 use App\Jobs\CreateUserRegistration;
 use App\Mail\InviteRegistration;
 use App\Models\User;
@@ -15,16 +15,27 @@ use Illuminate\Support\Facades\URL;
 class InviteUserService {
     
     public function __construct(
-        protected UserRepositoryInterface $user_repository_interface,
-        protected TeachersImport $teachersImport
+        protected UserRepositoryInterface $user_repository_interface
     ) { }
-
-    public function importUsers(UploadedFile $file, string $model_class_name)
+    
+    /**
+     * Imports users from a file and dispatches invites for valid data.
+     * @param BaseImportInterface $import
+     * @param UploadedFile $import_file
+     * @param string $model_class_name
+     * @return array {dispatched_count, duplicated_emails, errors}
+     */
+    public function importUsers(
+        BaseImportInterface $import,
+        UploadedFile $import_file,
+        string $model_class_name
+    ) : array
     {
-        $this->teachersImport->import($file);
-        $errors = $this->teachersImport->getDataErrors();
-        $valid_data = $this->teachersImport->getValidData();
-        $response = $this->dispatchInvites($valid_data,$model_class_name);
+        $import->import($import_file);
+        $errors     = $import->getDataErrors();
+        $valid_data = $import->getValidData();
+        $response   = $this->dispatchInvites($valid_data,$model_class_name);
+
         return [
             'dispatched_count' => $response['dispatched_count'],
             'duplicated_emails' => $response['duplicated_emails'],

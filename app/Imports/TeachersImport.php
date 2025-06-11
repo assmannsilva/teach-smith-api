@@ -1,25 +1,14 @@
 <?php
 namespace App\Imports;
 
+use App\Imports\Interfaces\BaseImportInterface;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Validator;
 use Maatwebsite\Excel\Concerns\Importable;
 use Maatwebsite\Excel\Concerns\SkipsErrors;
 use Maatwebsite\Excel\Concerns\SkipsFailures;
-use Maatwebsite\Excel\Concerns\SkipsOnError;
-use Maatwebsite\Excel\Concerns\SkipsOnFailure;
-use Maatwebsite\Excel\Concerns\ToCollection;
-use Maatwebsite\Excel\Concerns\WithBatchInserts;
-use Maatwebsite\Excel\Concerns\WithChunkReading;
-use Maatwebsite\Excel\Concerns\WithHeadingRow;
 
-class TeachersImport implements
-    ToCollection,
-    WithHeadingRow,
-    WithBatchInserts,
-    WithChunkReading,
-    SkipsOnError,
-    SkipsOnFailure
+class TeachersImport implements BaseImportInterface
 {
     use Importable,SkipsErrors,SkipsFailures;
 
