@@ -50,7 +50,7 @@ class TeacherService {
             ]);
         });
 
-        return $$teacher_transaction;
+        return $teacher_transaction;
        
     }
 }

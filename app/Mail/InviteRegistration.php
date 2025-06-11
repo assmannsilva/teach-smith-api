@@ -18,7 +18,7 @@ class InviteRegistration extends Mailable implements ShouldQueue
      * Create a new message instance.
      */
     public function __construct(
-        public User $user, 
+        public User $user,
         public string $complete_registration_url
     ){ }
 
@@ -28,7 +28,7 @@ class InviteRegistration extends Mailable implements ShouldQueue
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Invite Registration',
+            subject: 'Invite Registration | Teach Smith',
         );
     }
 
@@ -38,7 +38,12 @@ class InviteRegistration extends Mailable implements ShouldQueue
     public function content(): Content
     {
         return new Content(
-            view: 'view.name',
+            markdown: 'mail.invite-registration',
+            with: [
+                'invitee_name' => $this->user->first_name . ' ' . $this->user->surname,
+                "organization_name" => $this->user->organization->name,
+                'complete_registration_url' => $this->complete_registration_url,
+            ]
         );
     }
 

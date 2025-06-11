@@ -3,10 +3,13 @@
 namespace App\Jobs;
 
 use App\Models\Teacher;
-use App\Services\Invites\InviteUserService;
 use App\Services\TeacherService;
+use App\Services\User\InviteUserService;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Foundation\Queue\Queueable;
+use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Queue\SerializesModels;
 
 class CreateUserRegistration implements ShouldQueue
 {
@@ -21,7 +24,8 @@ class CreateUserRegistration implements ShouldQueue
      */
     public function __construct(
         public array $userData,
-        public string $publicModelClassName
+        public string $publicModelClassName,
+        public string $organizationId
     ) { }
 
     /**
@@ -34,7 +38,11 @@ class CreateUserRegistration implements ShouldQueue
 
         $model_service = app($serviceClass);
 
-        $model = $model_service->createFromInvitation($this->userData);
+        $model = $model_service->createFromInvitation([
+            ...$this->userData,
+            "organization_id" => $this->organizationId
+        ]);
+        
         $inviteUserService->invite($model->user);
     }
 }
