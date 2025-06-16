@@ -4,7 +4,7 @@ namespace App\Http\Requests\Users\Invites;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class BulkInviteTeachersRequest extends FormRequest
+class BulkInviteRequest extends FormRequest
 {
     public function authorize()
     {

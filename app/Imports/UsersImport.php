@@ -1,19 +1,27 @@
 <?php
 namespace App\Imports;
 
+use App\Http\Requests\Users\Invites\InviteTeachersRequest;
 use App\Imports\Interfaces\BaseImportInterface;
+use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Validator;
 use Maatwebsite\Excel\Concerns\Importable;
 use Maatwebsite\Excel\Concerns\SkipsErrors;
 use Maatwebsite\Excel\Concerns\SkipsFailures;
 
-class TeachersImport implements BaseImportInterface
+class UsersImport implements BaseImportInterface
 {
     use Importable,SkipsErrors,SkipsFailures;
 
     protected array $dataErrors = [];
     protected array $validData = [];
+    protected FormRequest $formRequest;
+
+    public function setFormRequestValidation(String $formRequest)
+    {
+        $this->formRequest = new $formRequest;
+    }
 
     public function collection(Collection $collection)
     {
@@ -32,14 +40,8 @@ class TeachersImport implements BaseImportInterface
 
     private function validateRow(Collection $row)
     {
-        return Validator::make($row->toArray(),[
-            'email' => 'required|email',
-            'cpf' => 'required|string|cpf',
-            'first_name' => 'required|string|max:255',
-            'surname' => 'required|string|max:255',
-            'degree' => 'required|string',
-            'hire_date' => 'required|date_format:Y-m-d',
-        ],["cpf.cpf" => "Document is not valid"]);
+        return Validator::make($row->toArray(),
+        $this->formRequest->rules(),["cpf.cpf" => "Document is not valid"]);
     }
 
     public function batchSize(): int
