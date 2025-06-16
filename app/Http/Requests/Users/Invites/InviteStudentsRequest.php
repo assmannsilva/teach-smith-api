@@ -17,14 +17,12 @@ class InviteStudentsRequest extends FormRequest
     public function rules()
     {
         return [
-            'students' => 'required|array|max:100',
-            'students.*.name' => 'required|string|max:255',
-            'students.*.email' => 'required|email',
-            'students.*.registration_code' => 'required|string|cpf',
-            'students.*.first_name' => 'required|string|max:255',
-            'students.*.surname' => 'required|string|max:255',
-            'students.*.grade_level' => 'required|string',
-            'students.*.admission_date' => 'required|date_format:Y-m-d',
+            'email' => 'required|email',
+            'registration_code' => 'required|max:255',
+            'first_name' => 'required|string|max:255',
+            'surname' => 'required|string|max:255',
+            'grade_level' => 'required|string',
+            'admission_date' => 'required|date_format:Y-m-d',
         ];
     }
 }
