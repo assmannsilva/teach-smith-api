@@ -1,10 +1,9 @@
 <?php
-use App\Exceptions\UserAlreadyRegisteredException;
+
+use App\Exceptions\UserNotFoundException;
 use App\Lib\AuthStrategy\StandardAuthStrategy;
 use App\Services\User\AuthService;
 use App\Models\User;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Support\Facades\Session;
 
 uses(\Illuminate\Foundation\Testing\RefreshDatabase::class);
 
@@ -32,7 +31,7 @@ it('login an user using Standard Auth Strategy', function() {
 it('cannot login an user that not has the specified email', function() {
     $authService = new AuthService(app(\App\Services\User\UserService::class));
 
-    $this->expectException(ModelNotFoundException::class);
+    $this->expectException(UserNotFoundException::class);
 
     $authService->authenticate([
         'email' => 'teste@gmail.com',
