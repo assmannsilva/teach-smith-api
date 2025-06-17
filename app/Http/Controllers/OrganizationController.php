@@ -33,7 +33,6 @@ class OrganizationController extends Controller
 
             return response()->json([
                 'message' => 'Failed to create organization',
-                'error' => 'An error occurred while creating the organization.'
             ], 500);
         }
     }

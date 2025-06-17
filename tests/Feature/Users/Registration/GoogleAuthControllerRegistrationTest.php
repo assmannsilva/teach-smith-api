@@ -47,7 +47,7 @@ it('cannot register via google due to invalid token', function() {
     
     $response->assertStatus(400);
     $response->assertJson([
-        'error' => 'Invalid token'
+        'message' => 'Invalid token'
     ]);
 });
 
@@ -67,7 +67,7 @@ it('cannot register via google due to invalid state', function() {
     
     $response->assertStatus(400);
     $response->assertJson([
-        'error' => 'Invalid state request.'
+        'message' => 'Invalid state request.'
     ]);
 });
 
@@ -89,6 +89,6 @@ it('cannot register via google due to user already registered', function() {
     
     $response->assertStatus(409);
     $response->assertJson([
-        'error' =>  "User with email {$user->email} is already registered."
+        'message' =>  "User with email {$user->email} is already registered."
     ]);
 });

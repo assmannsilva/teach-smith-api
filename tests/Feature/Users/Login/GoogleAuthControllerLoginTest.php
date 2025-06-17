@@ -31,7 +31,7 @@ it('cannot login via google due to invalid token', function() {
     
     $response->assertStatus(400);
     $response->assertJson([
-        'error' => 'Invalid token'
+        'message' => 'Invalid token'
     ]);
 });
 
@@ -45,7 +45,7 @@ it('cannot login via google due to invalid state', function() {
     
     $response->assertStatus(400);
     $response->assertJson([
-        'error' => 'Invalid state request.'
+        'message' => 'Invalid state request.'
     ]);
 });
 
@@ -63,6 +63,6 @@ it('cannot login via google due to user not exists', function() {
     
     $response->assertStatus(404);
     $response->assertJson([
-        'error' =>  "User with the given provider credentials could not be found."
+        'message' =>  "User with the given provider credentials could not be found."
     ]);
 });

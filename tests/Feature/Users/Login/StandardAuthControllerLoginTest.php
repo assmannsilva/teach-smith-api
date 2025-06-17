@@ -42,7 +42,7 @@ it('cannot login user through standard-auth controller endpoint due to user not 
     
     $response->assertStatus(404);
     $response->assertJson([
-        'error' =>  "User with the given email could not be found."
+        'message' =>  "User with the given email could not be found."
     ]);
 });
 

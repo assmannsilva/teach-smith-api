@@ -61,7 +61,7 @@ it('cannot register user through standard-auth controller endpoint due to user a
     
     $response->assertStatus(409);
     $response->assertJson([
-        'error' =>  "User with email {$user->email} is already registered."
+        'message' =>  "User with email {$user->email} is already registered."
     ]);
 });
 
