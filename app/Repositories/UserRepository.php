@@ -4,7 +4,6 @@ namespace App\Repositories;
 use App\Enums\ProvidersEnum;
 use App\Exceptions\UserNotFoundException;
 use App\Helpers\SodiumCrypto;
-use App\Models\Organization;
 use App\Models\User;
 use App\Repositories\BaseRepository;
 use App\Repositories\Interfaces\UserRepositoryInterface;
