@@ -2,6 +2,7 @@
 namespace App\Repositories;
 
 use App\Enums\ProvidersEnum;
+use App\Exceptions\UserNotFoundException;
 use App\Helpers\SodiumCrypto;
 use App\Models\Organization;
 use App\Models\User;
@@ -32,23 +33,29 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface {
      * Finds a user by their provider credentials
      * @param ProvidersEnum $provider
      * @param string $provider_id
-     * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
-     * @return User|null
+     * @throws UserNotFoundException
+     * @return User
      */
-    public function findByProviderCredentials(ProvidersEnum $provider, string $provider_id) : ?User
+    public function findByProviderCredentials(ProvidersEnum $provider, string $provider_id) : User
     {
-        return $this->newQuery()
+        $query = $this->newQuery()
         ->where('provider', $provider)
         ->where('provider_id', $provider_id)
         ->where("active",true)
-        ->firstOrFail();
+        ->first();
+        
+        if (!$query) {
+            throw new UserNotFoundException("User with the given provider credentials could not be found.");
+        }
+
+        return $query;
     }
     
     /**
      * Finds a user by their email address
      * @param string $email
      * @param bool $fail = false
-     * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
+     * @throws UserNotFoundException
      * @return User|null
      */
     public function findByEmail(string $email, bool $fail = false) : ?User
@@ -57,6 +64,12 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface {
         $email_index = SodiumCrypto::getIndex($email,$email_key_index);
         $query = $this->newQuery()->where('email_index', $email_index)->where("active",true);
 
-        return $fail ? $query->firstOrFail() : $query->first();
+        $user = $query->first();
+
+        if ($fail && !$user) {
+            throw new UserNotFoundException("User with the given email could not be found.");
+        }
+
+        return $user;
     }
 }

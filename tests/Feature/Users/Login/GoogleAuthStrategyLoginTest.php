@@ -3,11 +3,10 @@
 use App\Enums\ProvidersEnum;
 use App\Exceptions\InvalidStateRequestException;
 use App\Exceptions\InvalidTokenException;
-use App\Exceptions\UserAlreadyRegisteredException;
+use App\Exceptions\UserNotFoundException;
 use App\Lib\AuthStrategy\GoogleAuthStrategy;
 use App\Services\User\AuthService;
 use App\Models\User;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Session;
 
 uses(\Illuminate\Foundation\Testing\RefreshDatabase::class);
@@ -99,7 +98,7 @@ it('cannot login a user via GoogleAuth that not exists', function() {
 
     $authService = new AuthService(app(\App\Services\User\UserService::class));
 
-    $this->expectException(ModelNotFoundException::class);
+    $this->expectException(UserNotFoundException::class);
     /** @var \App\Lib\AuthStrategy\Interfaces\AuthStrategyInterface&\Mockery\LegacyMockInterface $strategy */
     $autenthicated = $authService->authenticate(['code' => 'valid-code', 'state' => $this->state], $strategy);
 });

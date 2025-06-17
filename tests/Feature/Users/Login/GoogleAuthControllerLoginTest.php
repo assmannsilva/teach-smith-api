@@ -1,11 +1,9 @@
 <?php
 
-use App\Models\Organization;
-use App\Models\User;
+use App\Exceptions\UserNotFoundException;
 use App\Repositories\UserRepository;
 use App\Services\User\AuthService;
 use App\Services\User\UserService;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 uses(\Illuminate\Foundation\Testing\RefreshDatabase::class);
 
@@ -57,7 +55,7 @@ it('cannot login via google due to user not exists', function() {
     $auth_service = Mockery::mock(AuthService::class, [new UserService(new UserRepository)]);
     $auth_service
     ->shouldReceive('authenticate')
-    ->andThrow(new ModelNotFoundException());
+    ->andThrow(new UserNotFoundException("User with the given provider credentials could not be found."));
 
     $this->app->instance(AuthService::class, $auth_service);
 
@@ -65,6 +63,6 @@ it('cannot login via google due to user not exists', function() {
     
     $response->assertStatus(404);
     $response->assertJson([
-        'error' =>  "Not Found"
+        'error' =>  "User with the given provider credentials could not be found."
     ]);
 });

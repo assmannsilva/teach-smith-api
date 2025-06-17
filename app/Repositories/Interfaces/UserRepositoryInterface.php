@@ -18,7 +18,7 @@ interface UserRepositoryInterface {
      * Finds a user by their email address
      * @param string $email
      * @param bool $fail = false
-     * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
+     * @throws UserNotFoundException
      * @return User|null
      */
     public function findByEmail(string $email, bool $fail = false) : ?User;
@@ -28,8 +28,8 @@ interface UserRepositoryInterface {
      * Finds a user by their provider credentials
      * @param ProvidersEnum $provider
      * @param string $provider_id
-     * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
-     * @return User|null
+     * @throws UserNotFoundException
+     * @return User
      */
-    public function findByProviderCredentials(ProvidersEnum $provider, string $provider_id) : ?User;
+    public function findByProviderCredentials(ProvidersEnum $provider, string $provider_id) : User;
 }
