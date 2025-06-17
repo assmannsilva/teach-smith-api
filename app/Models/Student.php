@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Student extends Model
 {
-    use HasUuids, HasFactory, HasEncrypt;
+    use HasUuids, HasFactory;
     /**
      * The attributes that are mass assignable.
      *
@@ -40,5 +40,10 @@ class Student extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function classrooms()
+    {
+        return $this->belongsToMany(Classroom::class);
     }
 }
