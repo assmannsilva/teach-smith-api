@@ -3,53 +3,53 @@
 namespace App\Services;
 
 use App\Enums\RolesEnum;
-use App\Models\Teacher;
-use App\Repositories\Interfaces\TeacherRepositoryInterface;
+use App\Models\Student;
+use App\Repositories\Interfaces\StudentRepositoryInterface;
 use App\Repositories\Interfaces\UserRepositoryInterface;
 use Illuminate\Support\Facades\DB;
 
-class TeacherService {
+class StudentService {
 
     public function __construct(
         protected UserRepositoryInterface $userRepository,
-        protected TeacherRepositoryInterface $teacherRepository
+        protected StudentRepositoryInterface $studentRepository
     ) { }
 
 
     /**
-     * Create a teacher and its user from an invitation data array.
+     * Create a student and its user from an invitation data array.
      *
      * @param array{
      *   email: string,
      *   first_name: string,
      *   surname: string,
      *   organization_id: int,
-     *   cpf: string,
-     *   degree: string,
-     *   hire_date: string
+     *   registration_code: string,
+     *   grade_level: string,
+     *   admission_date: string
      * } $insert_data
-     * @return Teacher
+     * @return Student
      */
-    public function createFromInvitation($insert_data) : Teacher
+    public function createFromInvitation($insert_data) : Student
     {
-        $teacher_transaction = DB::transaction(function () use ($insert_data) {
+        $student_transaction = DB::transaction(function () use ($insert_data) {
             $user = $this->userRepository->create([
                 'email' => $insert_data['email'],
                 'first_name' => $insert_data['first_name'],
                 'surname' => $insert_data['surname'],
                 'organization_id' => $insert_data['organization_id'],
-                'role' => RolesEnum::TEACHER,
+                'role' => RolesEnum::STUDENT,
                 'active' => false,
             ]);
     
-            return $this->teacherRepository->create([
+            return $this->studentRepository->create([
                 'user_id' => $user->id,
-                'cpf' => $insert_data['cpf'],
-                'degree' => $insert_data['degree'],
-                'hire_date' => $insert_data['hire_date'],
+                'registration_code' => $insert_data['registration_code'],
+                'grade_level' => $insert_data['grade_level'],
+                'admission_date' => $insert_data['admission_date'],
             ]);
         });
 
-        return $teacher_transaction;
+        return $student_transaction;
     }
 }

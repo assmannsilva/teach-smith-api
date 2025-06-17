@@ -2,6 +2,9 @@
 
 namespace App\Models;
 
+use App\Enums\GradeLevelEnum;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Student extends Model
@@ -32,7 +35,7 @@ class Student extends Model
     {
         return [
             'registration_code' => 'string',
-            'grade_level' => 'string',
+            'grade_level' => GradeLevelEnum::class,
             'admission_date' => 'date',
         ];
     }
