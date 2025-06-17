@@ -9,7 +9,7 @@ class InvalidStateRequestException extends Exception
         public function render($request)
     {
         return response()->json([
-            'error' => 'Invalid state request.'
+            'message' => 'Invalid state request.'
         ], 400);
     }
 }

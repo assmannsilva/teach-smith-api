@@ -9,7 +9,7 @@ class UserNotFoundException extends Exception
     public function render($request)
     {
         return response()->json([
-            'error' => $this->getMessage()
+            'message' => $this->getMessage()
         ], 404);
     }
 }
