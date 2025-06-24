@@ -1,7 +1,6 @@
 <?php
 namespace App\Imports;
 
-use App\Http\Requests\Users\Invites\InviteTeachersRequest;
 use App\Imports\Interfaces\BaseImportInterface;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Collection;
@@ -14,8 +13,9 @@ class UsersImport implements BaseImportInterface
 {
     use Importable,SkipsErrors,SkipsFailures;
 
-    protected array $dataErrors = [];
     protected array $validData = [];
+    protected int $totalErrorsCount = 0;
+
     protected FormRequest $formRequest;
 
     public function setFormRequestValidation(String $formRequest)
@@ -25,12 +25,10 @@ class UsersImport implements BaseImportInterface
 
     public function collection(Collection $collection)
     {
-        foreach ($collection as $rowNumber => $row) {
-            if($this->validateRow($row)->fails()) {
-                $this->dataErrors[] = [
-                    "errors" => $this->validateRow($row)->errors()->all(),
-                    "row" => $rowNumber + 2 // Assuming the first row is the header, so we add 2 to get the actual row number
-                ];
+        foreach ($collection as $row) {
+            $validation = $this->validateRow($row);
+            if($validation->fails()) {
+                $this->totalErrorsCount += 1;
                 continue;
             }
             $this->validData[] = $row->toArray();
@@ -54,9 +52,9 @@ class UsersImport implements BaseImportInterface
         return 100;
     }
 
-    public function getDataErrors(): array
+    public function getTotalErrorsCount(): int
     {
-        return $this->dataErrors ?? [];
+        return $this->totalErrorsCount;
     }
 
     public function getValidData(): array

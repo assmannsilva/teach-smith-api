@@ -18,11 +18,11 @@ interface BaseImportInterface extends
 {
 
     /**
-     * Returns the errors found during the import.
+     * Returns the total errors count
      *
-     * @return array
+     * @return int
      */
-    public function getDataErrors(): array;
+    public function getTotalErrorsCount(): int;
 
     /**
      * Returns the valid data after the import.
