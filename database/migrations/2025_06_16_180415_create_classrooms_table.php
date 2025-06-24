@@ -15,9 +15,11 @@ return new class extends Migration
             $table->uuid("id")->primary();
             $table->timestamps();
             $table->softDeletes();
-            $table->string("grade_level");
+            $table->string("grade");
             $table->string("section");
+            $table->string("education_stage");
             $table->integer("year");
+            $table->foreignUuid("organization_id")->constrained()->onDelete('cascade');
         });
     }
 

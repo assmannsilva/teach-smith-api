@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Enums\GradeLevelEnum;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -18,7 +17,8 @@ class Classroom extends Model
      * @var list<string>
      */
     protected $fillable = [
-        'grade_level',
+        'grade',
+        "education_stage",
         "section",
         "year",
     ];
@@ -26,8 +26,9 @@ class Classroom extends Model
     public function casts(): array
     {
         return [
-            'grade_level' => GradeLevelEnum::class,
+            'grade' => "string",
             'section' => 'string',
+            'education_stage' => 'string',
             'year' => 'integer',
         ];
     }
@@ -35,6 +36,11 @@ class Classroom extends Model
     public function subjects()
     {
         return $this->hasMany(Subject::class, 'classrom_id');
+    }
+
+    public function organization()
+    {
+        return $this->belongsTo(Organization::class, 'organization_id');
     }
 
     public function students()

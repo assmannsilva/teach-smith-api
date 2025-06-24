@@ -15,9 +15,7 @@ return new class extends Migration
             $table->uuid("id")->primary();
             $table->timestamps();
             $table->string('registration_code')->unique();
-            $table->string('grade_level');
             $table->date('admission_date');
-
             $table->foreignUuid('user_id')->constrained()->onDelete('cascade');
         });
     }

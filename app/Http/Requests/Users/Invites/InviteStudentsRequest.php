@@ -21,7 +21,8 @@ class InviteStudentsRequest extends FormRequest
             'registration_code' => 'required|max:255',
             'first_name' => 'required|string|max:255',
             'surname' => 'required|string|max:255',
-            'grade_level' => 'required|string',
+            'grade' => 'required|string',
+            'section' => 'required|string',
             'admission_date' => 'required|date_format:Y-m-d',
         ];
     }
