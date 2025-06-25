@@ -3,46 +3,32 @@
 namespace App\Http\Controllers\Users\Invites;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Users\Invites\BulkInviteRequest;
-use App\Imports\UsersImport;
-use App\Services\User\InviteUserService;
 
 abstract class BaseInviteController extends Controller
 {
-    protected String $userModel;
-    protected String $formRequestValidation;
 
-    protected function handleStore(
-        array $validated_data,
-        InviteUserService $invite_user_service,  
-    ) {
-        $result = $invite_user_service->dispatchInvites([$validated_data],$this->userModel);
-        return response()->json([
-            "message" => $result["dispatched_count"] > 0 ? "Invite dispatched" : "Already registered email",
-        ], $result["dispatched_count"] > 0 ? 200 : 400);  
-    }
-
-    public function import(
-        BulkInviteRequest $request,
-        InviteUserService $invite_user_service,
-        UsersImport $users_import
-    ) {
-        $users_import->setFormRequestValidation($this->formRequestValidation);
-        $result = $invite_user_service->importUsers(
-            $users_import,
-            $request->file("import_file"),
-            $this->userModel
-        );
-
+    protected function calculateStatusCode(array $result)
+    {
+        $check_errors = \array_filter($result["errors"], fn($error) => $error > 0);
         $status_code = match (true) {
-            !empty($result["errors"]) && $result["dispatched_count"] > 0 => 207,
-            empty($result["errors"]) && $result["dispatched_count"] > 0 => 200,
+            count($check_errors) != 0 && $result["dispatched"] > 0 => 207,
+            count($check_errors) == 0 && $result["dispatched"] > 0 => 200,
             default => 422,
         };
 
-        return response()->json([
-            ...$result,
-            "messsage" => $result["dispatched_count"] > 0 ? "Invites dispatched" : "Could not dispatch invites",
-        ],$status_code);
+        return $status_code;
+    }
+
+    protected function dataErrorMessage(int $total_data_errors)
+    {
+        if($total_data_errors == 0) return "";
+        return "$total_data_errors rows contain incorrect or missing data out";
+    }
+    
+    protected function alreadyRegisteredUsersMessage(?int $total_email_errors = null)
+    {
+        if($total_email_errors == null) return "email already registered";
+        if($total_email_errors == 0) return "";
+        return "$total_email_errors emails are already registered between valid rows";
     }
 }
