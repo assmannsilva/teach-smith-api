@@ -48,8 +48,8 @@ it('does not invite a teacher if email is already registered', function () {
 
     $response = $this->postJson(route('teachers.invite'), $payload);
 
-    $response->assertStatus(400)
-             ->assertJson(['message' => 'Already registered email']);
+    $response->assertStatus(422)
+             ->assertJson(['message' => 'email already registered']);
 
     Queue::assertNothingPushed();
 });

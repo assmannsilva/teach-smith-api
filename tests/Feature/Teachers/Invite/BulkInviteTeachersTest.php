@@ -31,10 +31,8 @@ CSV; //heredoc cannot be idented
 
       $response->assertStatus(200)
              ->assertJson([
-                 'dispatched_count' => 4,
-                 'duplicated_emails' => [],
+                 'dispatched' => 4,
                  'errors' => [],
-                 'messsage' => 'Invites dispatched',
              ]);
 
     Queue::assertPushed(CreateUserRegistration::class, 4);
@@ -61,18 +59,11 @@ CSV; //heredoc cannot be idented
 
     $response->assertStatus(207)
     ->assertJson([
-        'dispatched_count' => 3,
-        'duplicated_emails' => ["caueteste@gmail.com"],
+        'dispatched' => 3,
         'errors' => [
-            [
-                'errors' => [
-                    'Document is not valid',
-                    'The hire date field must match the format Y-m-d.'
-                ],
-                "row" => 6
-            ]
-        ],
-        'messsage' => 'Invites dispatched',
+            "1 rows contain incorrect or missing data out",
+            "1 emails are already registered between valid rows",
+        ]
     ]);
 
     Queue::assertPushed(CreateUserRegistration::class, 3);
@@ -98,29 +89,11 @@ CSV; //heredoc cannot be idented
 
     $response->assertStatus(422)
     ->assertJson([
-        'dispatched_count' => 0,
-        'duplicated_emails' => ["caueteste@gmail.com"],
+        'dispatched' => 0,
         'errors' => [
-            [
-                'errors' => [
-                    'The email field is required.',
-                    'The cpf field is required.',
-                    'The first name field is required.',
-                    'The surname field is required.',
-                    'The degree field is required.',
-                    'The hire date field is required.',
-                ],
-                "row" => 3
-            ],
-            [
-                'errors' => [
-                    'The email field must be a valid email address.',
-                    'The degree field is required.',
-                ],
-                "row" => 4
-            ]
-        ],
-        'messsage' => 'Could not dispatch invites',
+            "2 rows contain incorrect or missing data out",
+            "1 emails are already registered between valid rows",
+        ]
     ]);
 
     Queue::assertPushed(CreateUserRegistration::class, 0);
