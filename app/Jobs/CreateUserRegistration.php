@@ -2,7 +2,9 @@
 
 namespace App\Jobs;
 
+use App\Models\Student;
 use App\Models\Teacher;
+use App\Services\StudentService;
 use App\Services\TeacherService;
 use App\Services\User\InviteUserService;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -17,6 +19,7 @@ class CreateUserRegistration implements ShouldQueue
 
     protected array $modelServiceClasses = [
         Teacher::class => TeacherService::class,
+        Student::class => StudentService::class
     ];
 
     /**
