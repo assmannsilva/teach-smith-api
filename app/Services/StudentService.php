@@ -4,15 +4,20 @@ namespace App\Services;
 
 use App\Enums\RolesEnum;
 use App\Models\Student;
+use App\Repositories\Interfaces\ClassroomRepositoryInterface;
 use App\Repositories\Interfaces\StudentRepositoryInterface;
 use App\Repositories\Interfaces\UserRepositoryInterface;
+use App\Services\User\InviteUserService;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
 
 class StudentService {
 
     public function __construct(
         protected UserRepositoryInterface $userRepository,
-        protected StudentRepositoryInterface $studentRepository
+        protected StudentRepositoryInterface $studentRepository,
+        protected ClassroomRepositoryInterface $classroomRepository,
+        protected InviteUserService $inviteUserService
     ) { }
 
 
@@ -25,14 +30,20 @@ class StudentService {
      *   surname: string,
      *   organization_id: int,
      *   registration_code: string,
-     *   grade_level: string,
+     *   grade: string,
+     *   section: string,
      *   admission_date: string
      * } $insert_data
      * @return Student
      */
     public function createFromInvitation($insert_data) : Student
     {
-        $student_transaction = DB::transaction(function () use ($insert_data) {
+        $classroom = $this->classroomRepository->findByGradeAndSectionInCurrentYear(
+            $insert_data['grade'],
+            $insert_data['section']
+        );
+
+        $student_transaction = DB::transaction(function () use ($insert_data, $classroom) {
             $user = $this->userRepository->create([
                 'email' => $insert_data['email'],
                 'first_name' => $insert_data['first_name'],
@@ -45,11 +56,19 @@ class StudentService {
             return $this->studentRepository->create([
                 'user_id' => $user->id,
                 'registration_code' => $insert_data['registration_code'],
-                'grade_level' => $insert_data['grade_level'],
                 'admission_date' => $insert_data['admission_date'],
+                "classroom_id" => $classroom->id
             ]);
         });
 
         return $student_transaction;
+    }
+
+    public function inviteStudents(UploadedFile|array $import_data)
+    {
+        return $this->inviteUserService->dispatchInvites(
+            $import_data,
+            Student::class
+        );
     }
 }
