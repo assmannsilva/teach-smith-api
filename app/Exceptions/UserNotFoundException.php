@@ -4,12 +4,14 @@ namespace App\Exceptions;
 
 use Exception;
 
-class UserNotFoundException extends Exception
+class UserNotFoundException extends RegistrationException
 {
-    public function render($request)
+
+    public function __construct(String $message)
     {
-        return response()->json([
-            'message' => $this->getMessage()
-        ], 404);
+        parent::__construct(
+           $message,
+            404
+        );
     }
 }

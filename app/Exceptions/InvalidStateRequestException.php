@@ -2,14 +2,15 @@
 
 namespace App\Exceptions;
 
-use Exception;
-
-class InvalidStateRequestException extends Exception
+class InvalidStateRequestException extends RegistrationException
 {
-        public function render($request)
+       /**
+     * Create a new exception instance.
+     *
+     * @param string $message
+     */
+    public function __construct($message = 'Invalid token')
     {
-        return response()->json([
-            'message' => 'Invalid state request.'
-        ], 400);
+        parent::__construct($message,400);
     }
 }

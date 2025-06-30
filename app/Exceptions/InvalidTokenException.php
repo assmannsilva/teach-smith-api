@@ -2,9 +2,7 @@
 
 namespace App\Exceptions;
 
-use Exception;
-
-class InvalidTokenException extends Exception
+class InvalidTokenException extends RegistrationException
 {
     /**
      * Create a new exception instance.
@@ -13,13 +11,6 @@ class InvalidTokenException extends Exception
      */
     public function __construct($message = 'Invalid token')
     {
-        parent::__construct($message);
-    }
-
-    public function render($request)
-    {
-        return response()->json([
-            'message' => $this->getMessage()
-        ], 400);
+        parent::__construct($message,400);
     }
 }
