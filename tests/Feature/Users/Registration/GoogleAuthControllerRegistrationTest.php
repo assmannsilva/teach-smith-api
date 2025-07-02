@@ -44,11 +44,9 @@ it('cannot register via google due to invalid token', function() {
     $this->app->instance(AuthService::class, $auth_service);
 
     $response = $this->get(route('google.auth.register.callback', ['state' => $state, 'code' => 'valid-code']));
-    
-    $response->assertStatus(400);
-    $response->assertJson([
-        'message' => 'Invalid token'
-    ]);
+
+    $response->assertStatus(302);
+    $response->assertRedirect(\config('app.front_url') . '/?error=' . urlencode('Invalid token'));
 });
 
 it('cannot register via google due to invalid state', function() {
@@ -64,11 +62,9 @@ it('cannot register via google due to invalid state', function() {
     $this->app->instance(AuthService::class, $auth_service);
 
     $response = $this->get(route('google.auth.register.callback', ['state' => $state, 'code' => 'valid-code']));
-    
-    $response->assertStatus(400);
-    $response->assertJson([
-        'message' => 'Invalid state request.'
-    ]);
+
+    $response->assertStatus(302);
+    $response->assertRedirect(\config('app.front_url') . '/?error=' . urlencode('Invalid token'));
 });
 
 it('cannot register via google due to user already registered', function() {
@@ -86,9 +82,6 @@ it('cannot register via google due to user already registered', function() {
     $this->app->instance(AuthService::class, $auth_service);
 
     $response = $this->get(route('google.auth.register.callback', ['state' => $state, 'code' => 'valid-code']));
-    
-    $response->assertStatus(409);
-    $response->assertJson([
-        'message' =>  "User with email {$user->email} is already registered."
-    ]);
+    $response->assertStatus(302);
+    $response->assertRedirect(\config('app.front_url') . '/?error=' . urlencode("User with email {$user->email} is already registered."));
 });

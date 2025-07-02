@@ -28,11 +28,8 @@ it('cannot login via google due to invalid token', function() {
     $this->app->instance(AuthService::class, $auth_service);
 
     $response = $this->get(route('google.auth.login.callback', ['state' => $state, 'code' => 'invalid-code']));
-    
-    $response->assertStatus(400);
-    $response->assertJson([
-        'message' => 'Invalid token'
-    ]);
+    $response->assertStatus(302);
+    $response->assertRedirect(\config('app.front_url') . '/?error=' . urlencode('Invalid token'));
 });
 
 it('cannot login via google due to invalid state', function() {
@@ -43,10 +40,8 @@ it('cannot login via google due to invalid state', function() {
 
     $response = $this->get(route('google.auth.login.callback', ['state' => $state, 'code' => 'valid-code']));
     
-    $response->assertStatus(400);
-    $response->assertJson([
-        'message' => 'Invalid state request.'
-    ]);
+    $response->assertStatus(302);
+    $response->assertRedirect(\config('app.front_url') . '/?error=' . urlencode('Invalid token'));
 });
 
 it('cannot login via google due to user not exists', function() {
@@ -60,9 +55,6 @@ it('cannot login via google due to user not exists', function() {
     $this->app->instance(AuthService::class, $auth_service);
 
     $response = $this->getJson(route('google.auth.login.callback', ['state' => $state, 'code' => 'valid-code']));
-    
-    $response->assertStatus(404);
-    $response->assertJson([
-        'message' =>  "User with the given provider credentials could not be found."
-    ]);
+    $response->assertStatus(302);
+    $response->assertRedirect(\config('app.front_url') . '/?error=' . urlencode('User with the given provider credentials could not be found.'));
 });
