@@ -8,7 +8,15 @@ use Illuminate\Support\Facades\Log;
 use Throwable;
 
 class OrganizationController extends Controller
-{
+{   
+
+    /**
+     * Store a newly created organization in storage.
+     *
+     * @param StoreOrganizationRequest $request
+     * @param OrganizationService $organization_service
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function store(
         StoreOrganizationRequest $request,
         OrganizationService $organization_service
@@ -21,7 +29,7 @@ class OrganizationController extends Controller
             );
             return response()->json([
                 'message' => 'Organization created successfully',
-                'data' => $organization
+                'organization' => $organization
             ], 201);
 
         } catch (Throwable $th) {

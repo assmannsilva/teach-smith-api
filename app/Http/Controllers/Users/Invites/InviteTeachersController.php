@@ -10,6 +10,14 @@ use App\Services\User\InviteUserService;
 class InviteTeachersController extends BaseInviteController
 {
 
+    /**
+     * Handle the invitation of a single teacher.
+     *
+     * @param InviteTeachersRequest $request
+     * @param InviteUserService $invite_user_service
+     * @param DispatchTeacherInvites $dispatch_teacher_invites
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function store(
         InviteTeachersRequest $request,
         InviteUserService $invite_user_service,  
@@ -25,7 +33,15 @@ class InviteTeachersController extends BaseInviteController
            "message" => $response_message
         ],$this->calculateStatusCode($result));  
     }
-
+    
+    /**
+     * Handle the bulk import of teacher invites.
+     *
+     * @param BulkInviteRequest $request
+     * @param InviteUserService $invite_user_service
+     * @param DispatchTeacherInvites $dispatch_teacher_invites
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function import(
         BulkInviteRequest $request,
         InviteUserService $invite_user_service,

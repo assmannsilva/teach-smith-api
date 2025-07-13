@@ -18,6 +18,14 @@ class InviteStudentsController extends BaseInviteController
         return "$total_non_existent_classrooms classrooms do not exist among eligible users.";
     }
 
+    /**
+     * Handle the invitation of a single student.
+     *
+     * @param InviteStudentsRequest $request
+     * @param InviteUserService $invite_user_service
+     * @param DispatchStudentInvites $dispatch_student_invites
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function store(
         InviteStudentsRequest $request,
         InviteUserService $invite_user_service,  
@@ -35,6 +43,14 @@ class InviteStudentsController extends BaseInviteController
         ],$this->calculateStatusCode($result));  
     }
 
+    /**
+     * Handle the bulk import of student invites.
+     *
+     * @param BulkInviteRequest $request
+     * @param InviteUserService $invite_user_service
+     * @param DispatchStudentInvites $dispatch_student_invites
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function import(
         BulkInviteRequest $request,
         InviteUserService $invite_user_service,

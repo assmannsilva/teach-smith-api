@@ -14,7 +14,11 @@ class StandardAuthController extends Controller
         private StandardAuthStrategy $strategy,
         private AuthService $authService,
     ) { }
-
+    
+    /**
+     * Generate the OAuth login URL for standard authentication.
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function authenticate(StandardLoginRequest $request)
     {
         $credentials = $request->only('email', 'password');
@@ -25,6 +29,11 @@ class StandardAuthController extends Controller
         ],$authenticated ? 200 : 403);
     }
 
+    /**
+     * Handle user registration with standard authentication.
+     * @param StandardRegistrationRequest $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function register(StandardRegistrationRequest $request)
     {
         $credential = $request->input("password");

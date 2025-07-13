@@ -18,14 +18,22 @@ class GoogleAuthController extends Controller
         private AuthService $authService,
     ) { }
 
-
+    /**
+     * Generate the OAuth login URL for Google authentication.
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function generateOAuthLoginUrl()
     {
         return \response()->json([
             'url' => $this->authService->generateOAuthUrl(ProvidersActionsEnum::LOGIN,$this->strategy)
         ]);
     }
-    
+
+    /**
+     * Generate the OAuth register URL for Google authentication.
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function generateOAuthRegisterUrl(Request $request)
     {
         return \response()->json([
@@ -35,6 +43,11 @@ class GoogleAuthController extends Controller
         ]);
     }
 
+    /**
+     * Generate the OAuth register URL for invited users.
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function generateOAuthInvitedUrl(Request $request)
     {
         return \response()->json([
@@ -44,6 +57,11 @@ class GoogleAuthController extends Controller
         ]);
     }
 
+    /**
+     * Handle the callback from Google after authentication.
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function authenticateCallback(Request $request) 
     {
        $authenticated = $this->authService->authenticate($request->input(),$this->strategy);
@@ -52,6 +70,12 @@ class GoogleAuthController extends Controller
         ],$authenticated ? 200 : 403);
     }
 
+    /**
+     * Handle the callback for user registration after Google authentication.
+     * @param Request $request
+     * @param OrganizationService $organization_service
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function registerCallback(
         Request $request,
         OrganizationService $organization_service
@@ -71,6 +95,12 @@ class GoogleAuthController extends Controller
         ],201);
     }
 
+    /**
+     * Handle the callback for invited user registration after Google authentication.
+     * @param Request $request
+     * @param UserService $user_service
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function registerInvitedUserCallback(
         Request $request,
         UserService $user_service
