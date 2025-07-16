@@ -2,9 +2,9 @@
 
 namespace App\Services\User;
 
+use App\Exceptions\InvalidStateRequestException;
 use App\Models\User;
 use App\Repositories\Interfaces\UserRepositoryInterface;
-use ErrorException;
 
 class UserService {
 
@@ -20,8 +20,7 @@ class UserService {
     public function findByCriptedState(string $crypted_encoded_state) : User
     {
         $state_decrypted = \json_decode(\base64_decode($crypted_encoded_state));
-
-        if(!$state_decrypted) throw new ErrorException("teste");
+        if(!$state_decrypted) throw new InvalidStateRequestException;
 
         return $this->userRepository->find($state_decrypted["user_id"]);
     }
