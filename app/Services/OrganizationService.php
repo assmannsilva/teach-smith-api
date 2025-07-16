@@ -1,6 +1,7 @@
 <?php
 namespace App\Services;
 
+use App\Exceptions\InvalidStateRequestException;
 use App\Models\Organization;
 use App\Repositories\Interfaces\OrganizationRepositoryInterface;
 use Illuminate\Http\UploadedFile;
@@ -8,7 +9,7 @@ use Illuminate\Http\UploadedFile;
 class OrganizationService {
 
     public function __construct(
-        protected OrganizationRepositoryInterface $organization_repository,
+        protected OrganizationRepositoryInterface $organizationRepository,
         protected LogoFileProcessorService $logoFileProcessorService
     ){}
 
@@ -24,7 +25,7 @@ class OrganizationService {
     ) {
         $logo_path = $this->logoFileProcessorService->processLogoImage($logo_file);
 
-        return $this->organization_repository->create([
+        return $this->organizationRepository->create([
             'name' => $organization_name,
             'logo_url' => $logo_path,
         ]);
@@ -41,18 +42,31 @@ class OrganizationService {
         }
     }
 
-      /**
-     * Finds the user from a crypted state from the external provider
+    /**
+     * Finds the organization from a crypted state from the external provider
      * @param string $crypted_encoded_state
      * @return Organization
      */
     public function findByCriptedState(string $crypted_encoded_state) : Organization
     {
         $state_decrypted = \json_decode(\base64_decode($crypted_encoded_state),\true);
-        if(!$state_decrypted) throw new ErrorException("teste");
+        if(!$state_decrypted) throw new InvalidStateRequestException;
 
-        return $this->organization_repository->find($state_decrypted["organization_id"]);
+        return $this->organizationRepository->find($state_decrypted["organization_id"]);
     }
 
-    
+    /**
+     * Get the cached organization in the current session
+     * @param int $organization_id
+     * @return Organization
+     */
+    public function getCachedAutenticatedOrganization() : Organization
+    {
+        $user = \auth()->user();
+        $cache_key = 'organization_' . $user->organization_id;
+        $organization = Cache::remember($cache_key, now()->addMinutes(60), function () use ($user) {
+            return $user->organization;
+        });
+        return $organization;
+    }
 }

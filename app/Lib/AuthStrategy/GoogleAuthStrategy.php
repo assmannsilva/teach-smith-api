@@ -93,6 +93,7 @@ class GoogleAuthStrategy implements ExternalProviderInterface {
      * Realiza a autenticação do usuário
      * @param array $credentials<code,state,remember>
      * @return bool
+     * @throws InvalidStateRequestException
      */
     public function authenticate(array $credentials): bool
     {
