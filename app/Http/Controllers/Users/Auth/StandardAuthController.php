@@ -16,7 +16,8 @@ class StandardAuthController extends Controller
     ) { }
     
     /**
-     * Generate the OAuth login URL for standard authentication.
+     * Handle user authentication with standard authentication.
+     * @param StandardLoginRequest $request
      * @return \Illuminate\Http\JsonResponse
      */
     public function authenticate(StandardLoginRequest $request)

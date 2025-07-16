@@ -12,7 +12,7 @@ class RegistrationException extends Exception
         if (\Str::startsWith($routeName, 'google.auth.')) {
             return match ($routeName) {
                 'google.auth.login.callback' => \config("app.front_url")."/",
-                'google.auth.register.callback' => \config("app.front_url")."/",
+                'google.auth.register.callback' => \config("app.front_url")."/register",
                 'google.auth.register.invited.callback' => \config("app.front_url")."/",
                 default => \config("app.front_url")."/"
             };

@@ -15,8 +15,8 @@ it('login user through google auth endpoint', function() {
     $this->app->instance(AuthService::class, $auth_service);
 
     $response = $this->get(route('google.auth.login.callback', ['state' => $state, 'code' => 'valid-code']));
-    $response->assertStatus(200);
-    $response->assertJsonFragment(['message' => 'User authenticated successfully']);
+    $response->assertStatus(302);
+    $response->assertRedirect(\config('app.front_url') . '/home');
 });
 
 

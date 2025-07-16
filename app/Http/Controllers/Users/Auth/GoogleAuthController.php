@@ -64,10 +64,8 @@ class GoogleAuthController extends Controller
      */
     public function authenticateCallback(Request $request) 
     {
-       $authenticated = $this->authService->authenticate($request->input(),$this->strategy);
-       return \response()->json([
-            "message" => $authenticated ? "User authenticated successfully" : "Incorrect Credentials" 
-        ],$authenticated ? 200 : 403);
+       $this->authService->authenticate($request->input(),$this->strategy);
+       return \redirect()->to(\config("app.front_url") . "/home");
     }
 
     /**
@@ -81,7 +79,7 @@ class GoogleAuthController extends Controller
         OrganizationService $organization_service
     ) {
         $organization = $organization_service->findByCriptedState($request->input("state"));
-        $user = $this->authService->register([
+        $this->authService->register([
                 "organization_id" => $organization->id
             ],
             $request->input("code"),
@@ -89,10 +87,7 @@ class GoogleAuthController extends Controller
             $this->strategy
         );
         
-        return \response()->json([
-            "message" => "User registered successfully",
-            "user" => $user
-        ],201);
+        return \redirect()->to(\config("app.front_url") . "/home");
     }
 
     /**
