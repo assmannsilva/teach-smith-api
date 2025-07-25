@@ -5,6 +5,7 @@ use App\Exceptions\InvalidStateRequestException;
 use App\Models\Organization;
 use App\Repositories\Interfaces\OrganizationRepositoryInterface;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Cache;
 
 class OrganizationService {
 
