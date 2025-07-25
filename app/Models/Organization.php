@@ -18,6 +18,11 @@ class Organization extends Model
         "logo_url"
     ];
 
+    protected $hidden = [
+        'logo_url',
+        'name_index',
+    ];
+
     protected function name(): Attribute
     {
         return Attribute::make(...$this->makeEncryptedAttributeCallables('name'));

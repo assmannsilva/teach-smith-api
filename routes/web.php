@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Users\Auth\GoogleAuthController;
 use App\Http\Controllers\Users\Auth\StandardAuthController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -21,4 +22,10 @@ Route::prefix('google-auth')->controller(GoogleAuthController::class)->group(fun
 Route::prefix('standard-auth')->controller(StandardAuthController::class)->group(function () {
     Route::post('/register', 'register')->name('auth.register');
     Route::post('/login', 'authenticate')->name('auth.login');
+});
+
+Route::middleware("auth:sanctum")->get('/organization_logo', function () {
+    $path = Auth::user()->organization->logo_url;
+    if (!file_exists($path)) abort(404);
+    return response()->file($path);
 });
