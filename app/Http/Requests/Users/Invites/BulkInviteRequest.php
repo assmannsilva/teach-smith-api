@@ -13,6 +13,6 @@ class BulkInviteRequest extends FormRequest
 
     public function rules()
     {
-        return ['import_file' => ['required', 'file', 'mimes:csv,txt','max:10240'] ];
+        return ['import_file' => ['required', 'file', 'mimetypes:text/csv,text/plain,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet','max:10240'] ];
     }
 }
