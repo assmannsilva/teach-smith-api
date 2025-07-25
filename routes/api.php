@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ClassroomController;
 use App\Http\Controllers\OrganizationController;
 use App\Http\Controllers\Users\Invites\InviteStudentsController;
 use App\Http\Controllers\Users\Invites\InviteTeachersController;
@@ -22,6 +23,14 @@ Route::middleware("auth:sanctum")->prefix('teachers')->group(function () {
 Route::middleware("auth:sanctum")->prefix('students')->group(function () {
     Route::post('invite',[InviteStudentsController::class, "store"])->name('students.invite');
     Route::post('bulk-invite',[InviteStudentsController::class, "import"])->name('students.bulk-invite');
+});
+
+Route::middleware("auth:sanctum")->prefix('classrooms')->controller(ClassroomController::class)->group(function () {
+    Route::get('/', 'index')->name('classrooms.index');
+    Route::post('/', 'store')->name('classrooms.store');
+    Route::get('/{id}', 'show')->name('classrooms.show');
+    Route::put('/{id}', 'update')->name('classrooms.update');
+    Route::delete('/{id}', 'destroy')->name('classrooms.destroy');
 });
 
 

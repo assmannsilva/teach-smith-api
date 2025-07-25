@@ -21,6 +21,7 @@ class Classroom extends Model
         "education_stage",
         "section",
         "year",
+        "organization_id",
     ];
 
     public function casts(): array

@@ -54,7 +54,7 @@ abstract class BaseRepository
 	 *
 	 * @return EloquentCollection|Paginator
 	 */
-	protected function getAll($take = 15, $paginate = true)
+	public function getAll($take = 15, $paginate = true)
 	{
 		return $this->doQuery(null, $take, $paginate);
 	}
@@ -105,6 +105,16 @@ abstract class BaseRepository
 	public function update(Model $model ,array $update_data)
 	{
 		return $model->update($update_data);
+	}
+
+	/**
+	 * Deletes a record
+	 * @param Model $model
+	 * @return bool
+	 */
+	public function delete(Model $model): bool
+	{
+		return $model->delete();
 	}
 
 }
