@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ClassroomController;
 use App\Http\Controllers\OrganizationController;
+use App\Http\Controllers\SubjectController;
 use App\Http\Controllers\Users\Invites\InviteStudentsController;
 use App\Http\Controllers\Users\Invites\InviteTeachersController;
 use App\Http\Controllers\Users\ProfileController;
@@ -31,6 +32,14 @@ Route::middleware("auth:sanctum")->prefix('classrooms')->controller(ClassroomCon
     Route::get('/{id}', 'show')->name('classrooms.show');
     Route::put('/{id}', 'update')->name('classrooms.update');
     Route::delete('/{id}', 'destroy')->name('classrooms.destroy');
+});
+
+Route::middleware("auth:sanctum")->prefix('subjects')->controller(SubjectController::class)->group(function () {
+    Route::get('/', 'index')->name('subjects.index');
+    Route::post('/', 'store')->name('subjects.store');
+    Route::get('/{id}', 'show')->name('subjects.show');
+    Route::put('/{id}', 'update')->name('subjects.update');
+    Route::delete('/{id}', 'destroy')->name('subjects.destroy');
 });
 
 
