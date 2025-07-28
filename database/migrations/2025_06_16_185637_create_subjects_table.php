@@ -16,8 +16,9 @@ return new class extends Migration
             $table->timestamps();
             $table->softDeletes();
             $table->string("name");
-            $table->foreignUuid("teacher_id")->constrained('users')->onDelete('cascade');
-            $table->foreignUuid("classrom_id")->constrained('classrooms')->onDelete('cascade');
+            $table->foreignUuid("teacher_id")->constrained('teachers')->onDelete('cascade');
+            $table->foreignUuid("classroom_id")->constrained('classrooms')->onDelete('cascade');
+            $table->foreignUuid("organization_id")->constrained()->onDelete('cascade');
         });
     }
 
