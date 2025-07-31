@@ -27,8 +27,8 @@ abstract class BaseInviteController extends Controller
     
     protected function alreadyRegisteredUsersMessage(?int $total_email_errors = null)
     {
-        if($total_email_errors == null) return "email already registered";
         if($total_email_errors == 0) return "";
-        return "$total_email_errors emails are already registered between valid rows";
+        if($total_email_errors == 1) return "1 email is already registered";
+        return "$total_email_errors emails are already registered";
     }
 }

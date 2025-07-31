@@ -25,7 +25,7 @@ class InviteTeachersController extends BaseInviteController
     ) {
         $result = $invite_user_service->dispatchSingleInvite($request->input(),$dispatch_teacher_invites);
         $response_message = match (true) {
-            $result["errors"]["total_duplicated"] > 0 => $this->alreadyRegisteredUsersMessage(),
+            $result["errors"]["total_duplicated"] > 0 => $this->alreadyRegisteredUsersMessage(1),
             default => "Invite dispatched"
         };
 
@@ -52,10 +52,10 @@ class InviteTeachersController extends BaseInviteController
             $dispatch_teacher_invites
         );
 
-        $errors = \array_filter([
+        $errors = \array_values(\array_filter([
             $this->dataErrorMessage($result["errors"]["total_data_errors"]),
             $this->alreadyRegisteredUsersMessage($result["errors"]["total_duplicated"]),
-        ]);
+        ]));
 
         return \response([
            "dispatched" => $result["dispatched"],

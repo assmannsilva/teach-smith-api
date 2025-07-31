@@ -38,8 +38,11 @@ class UsersImport implements BaseImportInterface
 
     private function validateRow(Collection $row)
     {
-        return Validator::make($row->toArray(),
-        $this->formRequest->rules(),["cpf.cpf" => "Document is not valid"]);
+        return Validator::make(
+            $row->toArray(),
+            $this->formRequest->rules(),
+            ["cpf.cpf" => "Document is not valid"]
+        );
     }
 
     public function batchSize(): int

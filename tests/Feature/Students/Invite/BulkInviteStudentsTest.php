@@ -75,7 +75,7 @@ CSV; //heredoc cannot be idented
         'dispatched' => 3,
         'errors' => [
             "1 rows contain incorrect or missing data out",
-            "1 emails are already registered between valid rows",
+            "1 email is already registered",
             "2 classrooms do not exist among eligible users.",
         ]
     ]);
@@ -106,7 +106,7 @@ CSV; //heredoc cannot be idented
         'dispatched' => 0,
         'errors' => [
             "2 rows contain incorrect or missing data out",
-            "1 emails are already registered between valid rows",
+            "1 email is already registered",
         ]
     ]);
 

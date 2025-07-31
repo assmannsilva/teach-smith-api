@@ -61,7 +61,7 @@ it('does not invite a student if email is already registered', function () {
     $response = $this->postJson(route('students.invite'), $payload);
 
     $response->assertStatus(422)
-             ->assertJson(['message' => 'email already registered']);
+             ->assertJson(['message' => '1 email is already registered']);
 
     Queue::assertNothingPushed();
 });

@@ -33,7 +33,7 @@ class InviteStudentsController extends BaseInviteController
     ) {
         $result = $invite_user_service->dispatchSingleInvite($request->input(),$dispatch_student_invites);
         $response_message = match (true) {
-            $result["errors"]["total_duplicated"] > 0 => $this->alreadyRegisteredUsersMessage(),
+            $result["errors"]["total_duplicated"] > 0 => $this->alreadyRegisteredUsersMessage(1),
             $result["errors"]["total_non_existing_classrooms"] > 0 => $this->classromsNonExistentErrorMessage(),
             default => "Invite dispatched"
         };
