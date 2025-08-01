@@ -19,6 +19,8 @@ Route::middleware("auth:sanctum")->prefix('profile')->controller(ProfileControll
 Route::middleware("auth:sanctum")->prefix('teachers')->group(function () {
     Route::post('invite',[InviteTeachersController::class, "store"])->name('teachers.invite');
     Route::post('bulk-invite',[InviteTeachersController::class, "import"])->name('teachers.bulk-invite');
+    Route::get('search', [\App\Http\Controllers\TeacherController::class, 'search'])->name('teachers.search');
+    //Route::get('', [\App\Http\Controllers\TeacherController::class, 'index'])->name('teachers.index');
 });
 
 Route::middleware("auth:sanctum")->prefix('students')->group(function () {
