@@ -3,7 +3,9 @@
 namespace App\Repositories\Interfaces;
 
 use App\Enums\ProvidersEnum;
+use App\Enums\RolesEnum;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Collection;
 
 interface UserRepositoryInterface {
 
@@ -32,4 +34,14 @@ interface UserRepositoryInterface {
      * @return User
      */
     public function findByProviderCredentials(ProvidersEnum $provider, string $provider_id) : User;
+
+    /**
+     * Searches for users by name and role using encrypted indexes.
+     *
+     * @param string $name
+     * @param RolesEnum $role
+     * @param int $limit
+     * @return Collection
+     */
+    public function searchByNameAndRole(string $name, RolesEnum $role, int $limit): Collection;
 }

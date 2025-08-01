@@ -10,11 +10,12 @@ use Illuminate\Support\Facades\DB;
 
 class TeacherService {
 
+    private const SELECT_LIMIT = 6;
+
     public function __construct(
         protected UserRepositoryInterface $userRepository,
         protected TeacherRepositoryInterface $teacherRepository
     ) { }
-
 
     /**
      * Create a teacher and its user from an invitation data array.
@@ -51,5 +52,15 @@ class TeacherService {
         });
 
         return $teacher_transaction;
+    }
+
+    public function searchTeachersByName(string $name)
+    {
+        return $this->userRepository->searchByNameAndRole(
+            $name,
+            RolesEnum::TEACHER,
+            self::SELECT_LIMIT
+        );
+
     }
 }

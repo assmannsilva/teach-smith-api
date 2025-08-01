@@ -2,15 +2,47 @@
 namespace App\Repositories;
 
 use App\Enums\ProvidersEnum;
+use App\Enums\RolesEnum;
 use App\Exceptions\UserNotFoundException;
 use App\Helpers\SodiumCrypto;
 use App\Models\User;
 use App\Repositories\BaseRepository;
 use App\Repositories\Interfaces\UserRepositoryInterface;
+use Illuminate\Contracts\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 
 class UserRepository extends BaseRepository implements UserRepositoryInterface {
 
     protected $modelClass = User::class;
+
+    /**
+     * Applies a name-based index filter to the given query.
+     *
+     * @param string $name Full or partial name (first name, surnames, or both)
+     * @param Builder $query The base query to apply filters to
+     * @return Builder The updated query builder with filters applied
+     */
+    protected function filterByNameIndex(string $name, Builder $query) : Builder
+    {
+        $names = \explode(" ", $name);
+        $first_name = $names[0];
+
+        $first_name_key_index = SodiumCrypto::getCryptKey("app.crypted_columns.users.first_name_index");
+        $surname_key_index = SodiumCrypto::getCryptKey("app.crypted_columns.users.surname_index");
+
+        $first_name_index = SodiumCrypto::getIndex($first_name, $first_name_key_index);
+        $names_indexes = \array_map(
+            fn($name) => SodiumCrypto::getIndex($name, $surname_key_index), //Get all names (possibly first_name included)
+            $names
+        );
+        
+        return $query->where(function($sub_query) use($first_name_index,$names_indexes) {
+            $sub_query->orWhere("first_name_index",$first_name_index);
+            foreach ($names_indexes as $surname_index) {
+                $sub_query->orWhereJsonContains("surname_tokens", $surname_index);
+            }
+        });
+    }
 
     /**
      * Checks if any of the given emails exist in the database
@@ -71,4 +103,28 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface {
 
         return $user;
     }
+
+    /**
+     * Searches for users by name and role using encrypted indexes.
+     *
+     * @param string $name
+     * @param RolesEnum $role
+     * @param int $limit
+     * @return Collection
+     */
+    public function searchByNameAndRole(string $name, RolesEnum $role, int $limit): Collection
+    {
+        $query = $this->newQuery();
+        if($role) $query = $query->where("role",$role);
+
+       
+        return $this->filterByNameIndex($name,$query)
+        ->limit($limit)
+        ->select("id","first_name","surname")
+        ->get();
+
+    }
+
+
+
 }
