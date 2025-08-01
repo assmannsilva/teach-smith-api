@@ -14,7 +14,7 @@ beforeEach(function() {
 });
 
 test('list classrooms', function () {
-    Classroom::factory()->count(2)->create();
+    Classroom::factory()->count(2)->create(["organization_id" => $this->user->organization_id]);
     $response = getJson(route('classrooms.index'));
     $response->assertOk();
     $response->assertJsonCount(2, 'data');

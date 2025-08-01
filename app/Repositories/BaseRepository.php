@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Pagination\AbstractPaginator as Paginator;
+use Illuminate\Support\Facades\Auth;
 
 abstract class BaseRepository
 {
@@ -54,9 +55,11 @@ abstract class BaseRepository
 	 *
 	 * @return EloquentCollection|Paginator
 	 */
-	public function getAll($take = 15, $paginate = true)
+	public function getAll($take = 15, $paginate = true, $filterByOrganizationAccount = true)
 	{
-		return $this->doQuery(null, $take, $paginate);
+		$query = $this->newQuery();
+		if($filterByOrganizationAccount) $query->where('organization_id', Auth::user()->organization_id);
+		return $this->doQuery($query, $take, $paginate);
 	}
 
 
