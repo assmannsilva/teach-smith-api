@@ -40,7 +40,8 @@ class StudentService {
     {
         $classroom = $this->classroomRepository->findByGradeAndSectionInCurrentYear(
             $insert_data['grade'],
-            $insert_data['section']
+            $insert_data['section'],
+            $insert_data['organization_id']
         );
 
         $student_transaction = DB::transaction(function () use ($insert_data, $classroom) {

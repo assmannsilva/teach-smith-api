@@ -14,13 +14,14 @@ class ClassroomRepository extends BaseRepository implements ClassroomRepositoryI
      * Find a classroom by grade and section in the current academic year.
      * @param string $grade The grade of the classroom.
      * @param string $section The section of the classroom.
+     * @param string $organization_id The organization ID of the classroom.
      * @return ?Classroom The classroom model instance.
      */
-    public function findByGradeAndSectionInCurrentYear(string $grade, string $section): ?Classroom
+    public function findByGradeAndSectionInCurrentYear(string $grade, string $section, string $organization_id): ?Classroom
     {
         $currentYear = Carbon::now()->year;
         return $this->newQuery()
-            ->where("organization_id",Auth::user()->organization_id)
+            ->where("organization_id",$organization_id)
             ->where('grade', $grade)
             ->where('section', $section)
             ->where('year', $currentYear)
@@ -34,6 +35,8 @@ class ClassroomRepository extends BaseRepository implements ClassroomRepositoryI
      */
     public function getExistingGradesSectionsInCurrentYear(array $grades_sections): array
     {
+        if(count($grades_sections) == 0) return [];
+
         $bindings = [];
         $placeholders = \collect($grades_sections)->map(function ($pair) use (&$bindings) {
             $bindings[] = $pair['grade'];

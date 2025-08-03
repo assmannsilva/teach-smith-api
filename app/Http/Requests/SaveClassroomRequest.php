@@ -23,9 +23,9 @@ class SaveClassroomRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'grade' => 'required|string|max:255',
+            'grade' => 'required|string|max:20',
             'education_stage' => 'required|string|max:255',
-            'section' => 'required|string|max:255',
+            'section' => 'required|string|max:6',
             'year' => 'required|integer|min:1955|max:' . (date('Y') + 1),
         ];
     }
