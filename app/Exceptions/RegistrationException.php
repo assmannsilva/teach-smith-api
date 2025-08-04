@@ -19,7 +19,7 @@ class RegistrationException extends Exception
             return match ($routeName) {
                 'google.auth.login.callback' => \config("app.front_url")."/",
                 'google.auth.register.callback' => \config("app.front_url")."/register",
-                'google.auth.register.invited.callback' => \config("app.front_url")."/",
+                'google.auth.register.invited.callback' => \config("app.front_url")."/complete-registration",
                 default => \config("app.front_url")."/"
             };
         }

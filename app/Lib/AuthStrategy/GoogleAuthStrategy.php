@@ -156,7 +156,8 @@ class GoogleAuthStrategy implements ExternalProviderInterface {
         if($user_finded = $this->userRepository->findByEmail($google_user_data->email)) {
             throw new UserAlreadyRegisteredException($user_finded);
         }
-
+        
+        $user->active = true;
         $this->userRepository->save($user);
         
         Auth::login($user);

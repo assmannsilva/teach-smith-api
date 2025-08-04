@@ -19,7 +19,7 @@ class UserService {
      */
     public function findByCriptedState(string $crypted_encoded_state) : User
     {
-        $state_decrypted = \json_decode(\base64_decode($crypted_encoded_state));
+        $state_decrypted = \json_decode(\base64_decode($crypted_encoded_state),true);
         if(!$state_decrypted) throw new InvalidStateRequestException;
 
         return $this->userRepository->find($state_decrypted["user_id"]);

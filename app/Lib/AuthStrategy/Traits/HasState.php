@@ -39,8 +39,10 @@ trait HasState
      * @param string $state
      * @return bool
      */
-    public function checkState(string $state) : bool
+    public function checkState(?string $state) : bool
     {
+        if(!$state || !\is_string($state)) return false;
+        
         $state_decoded = \json_decode(\base64_decode($state),\true);
         $session_state = session()->get("csrf_state_token");
         session()->forget("csrf_state_token");
