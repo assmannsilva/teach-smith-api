@@ -7,8 +7,6 @@ use App\Models\Student;
 use App\Repositories\Interfaces\ClassroomRepositoryInterface;
 use App\Repositories\Interfaces\StudentRepositoryInterface;
 use App\Repositories\Interfaces\UserRepositoryInterface;
-use App\Services\User\InviteUserService;
-use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
 
 class StudentService {
