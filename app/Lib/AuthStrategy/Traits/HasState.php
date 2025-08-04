@@ -9,7 +9,7 @@ trait HasState
     protected string|null $state;
 
     /**
-     * armazena o estado
+     * Stores the CSRF token in the session.
      * @return void
      */
     private function storeCsrfToken(string $csrf): void
@@ -18,7 +18,7 @@ trait HasState
     }
     
     /**
-     * Gera um estado aleatório para a autenticação
+     * Generates a random state for authentication.
      *
      * @return string
      */
@@ -34,6 +34,11 @@ trait HasState
         return $this->state;
     }
 
+    /**
+     * Checks if the provided state matches the stored CSRF token.
+     * @param string $state
+     * @return bool
+     */
     public function checkState(string $state) : bool
     {
         $state_decoded = \json_decode(\base64_decode($state),\true);
@@ -43,9 +48,4 @@ trait HasState
         
         return hash_equals($session_state, $state_decoded["csrf"]);
     }
-    
-
-
-
-
 }

@@ -18,6 +18,12 @@ class DispatchTeacherInvites extends DispatchUserInvitesTemplate
         parent::__construct($userRepository, $usersImport);
     }
 
+    /**
+     * Applies user-type specific validations.
+     *
+     * @param array $users_raw_data
+     * @return array
+     */
     protected function applyValidations(array $users_raw_data): array
     {
         return $this->filterDuplicatedEmails($users_raw_data); 

@@ -6,14 +6,16 @@ use App\Models\User;
 interface AuthStrategyInterface
 {   
     /**
+     * Completes the registration of a user with the provided credential.
      * @param User $user
-     * @param string $auth_credential (senha ou code) 
-     * @param ?string $state (dados extras e proteção CSRF)
+     * @param string $auth_credential (password or code) 
+     * @param ?string $state (extra data and  CSRF protection)
      */
     public function makeRegistration(User $user, string $auth_credential, ?string $state = null) : User;
 
     /**
-     * @param array $credentials Dados necessários para autenticação (email/senha, ou code, etc.)
+     *  Performs authentication
+     * @param array $credentials (email/password or code, etc.)
      */
     public function authenticate(array $credentials) : bool;
 }

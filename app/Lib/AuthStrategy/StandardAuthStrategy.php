@@ -31,9 +31,9 @@ class StandardAuthStrategy implements AuthStrategyInterface {
     }
     
     /**
-     * Completa o registro do usuário com a senha fornecida
+     * Completes the registration of a user with the provided credential.
      * @param User $user
-     * @param string $auth_credential Senha do usuário
+     * @param string $auth_credential user password
      * @param ?string $state (não utilizada nessa implementação)
      * @return User
      */

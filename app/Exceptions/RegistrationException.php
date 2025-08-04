@@ -6,6 +6,12 @@ use Exception;
 
 class RegistrationException extends Exception
 {
+    /**
+     * Check if the exception is related to the Google authentication flow.
+     * If so, it redirects to the appropriate URL based on the route name.
+     * @param \Illuminate\Http\Request $request
+     * @return string|null
+     */
     protected function checkGoogleAuthFlowException($request)
     {
         $routeName = $request->route()?->getName();

@@ -6,6 +6,7 @@ use App\Enums\RolesEnum;
 use App\Models\Teacher;
 use App\Repositories\Interfaces\TeacherRepositoryInterface;
 use App\Repositories\Interfaces\UserRepositoryInterface;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\DB;
 
 class TeacherService {
@@ -54,7 +55,12 @@ class TeacherService {
         return $teacher_transaction;
     }
 
-    public function searchTeachersByName(string $name)
+    /**
+     * Search some options of teaachers by name.
+     * @param string $name
+     * @return Collection
+     */
+    public function searchTeachersByName(string $name): Collection
     {
         return $this->userRepository->searchByNameAndRole(
             $name,

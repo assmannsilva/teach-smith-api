@@ -25,6 +25,10 @@ class GoogleAuthStrategy implements ExternalProviderInterface {
         protected UserRepositoryInterface $userRepository
     ) { }
 
+    /**
+     * Set the google code verifier in the session.
+     * @return void
+     */
     protected function configureGoogleCodeVerifier(): void
     {
         $code = $this->client->getOAuth2Service()->generateCodeVerifier();
@@ -32,7 +36,7 @@ class GoogleAuthStrategy implements ExternalProviderInterface {
     }
 
     /**
-     * Define a URL de redirecionamento do Google
+     * Set the Google redirect URI.
      * @param ProvidersActionsEnum $action
      * @return void
      */
@@ -42,7 +46,7 @@ class GoogleAuthStrategy implements ExternalProviderInterface {
     }
 
     /**
-     * Gera a URL de autenticação do Google
+     * Generates an OAuth URL for the Google authentication.
      * @param ProvidersActionsEnum $action
      * @param array $state_extra_data (Use this for a data that must be used on the callback)
      * @return string
@@ -60,7 +64,7 @@ class GoogleAuthStrategy implements ExternalProviderInterface {
     }
 
     /**
-     * Busca as informações do usuário no Google
+     * Searches for user information using the access token.
      * @param string $token
      * @return Userinfo
      */
@@ -72,7 +76,7 @@ class GoogleAuthStrategy implements ExternalProviderInterface {
     }
 
     /**
-     * Gera o token de acesso do Google
+     * Generates the Google access token.
      * @param string $code
      * @return string
      * @throws InvalidTokenException
@@ -90,8 +94,8 @@ class GoogleAuthStrategy implements ExternalProviderInterface {
     }
 
     /**
-     * Realiza a autenticação do usuário
-     * @param array $credentials<code,state,remember>
+     * Authenticates the user.
+     * @param array $credentials (code, state, remember)
      * @return bool
      * @throws InvalidStateRequestException
      */
@@ -109,6 +113,12 @@ class GoogleAuthStrategy implements ExternalProviderInterface {
         return true;
     }
 
+    /**
+     * Completes the user data with information from Google.
+     * @param User $user
+     * @param Userinfo $user_info_from_google
+     * @return User
+     */
     private function completeUserData(User $user, Userinfo $user_info_from_google)
     {
         $user->email = $user_info_from_google->email;
@@ -125,10 +135,10 @@ class GoogleAuthStrategy implements ExternalProviderInterface {
     }
 
     /**
-     * Registra o usuário com o método de autenticação do Google
+     * Registers the user with the Google authentication method.
      * @param User $user
      * @param string $auth_credential (code)
-     * @param string $state (dados extras e proteção CSRF)
+     * @param string $state (extra data and CSRF protection)
      * @return User
      * @throws UserAlreadyRegisteredException
      * @throws InvalidStateRequestException

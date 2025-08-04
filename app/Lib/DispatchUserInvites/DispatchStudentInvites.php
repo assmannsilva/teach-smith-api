@@ -20,6 +20,12 @@ class DispatchStudentInvites extends DispatchUserInvitesTemplate
         parent::__construct($userRepository, $usersImport);
     }
 
+    /**
+     * Validates classrooms for the students being invited.
+     *
+     * @param array $users_raw_data
+     * @return array
+     */
     private function validateClassrooms(array $users_raw_data) : array
     {
         $grades_and_sections =  collect($users_raw_data)
@@ -42,6 +48,12 @@ class DispatchStudentInvites extends DispatchUserInvitesTemplate
         ];
     }
 
+     /**
+     * Applies user-type specific validations.
+     *
+     * @param array $users_raw_data
+     * @return array
+     */
     protected function applyValidations(array $users_raw_data): array
     {
         $filter_response = $this->filterDuplicatedEmails($users_raw_data);

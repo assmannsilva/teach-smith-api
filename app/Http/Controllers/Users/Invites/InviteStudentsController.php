@@ -10,6 +10,12 @@ use App\Services\User\InviteUserService;
 class InviteStudentsController extends BaseInviteController
 {
 
+    /**
+     * Generates a message for non-existent classrooms.
+     *
+     * @param array $total_non_existent_classrooms
+     * @return string
+     */
     protected function classromsNonExistentErrorMessage(?int $total_non_existent_classrooms = null)
     {
         if($total_non_existent_classrooms == null) return "classroom do not exist";

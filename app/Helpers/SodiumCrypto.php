@@ -5,7 +5,7 @@ namespace App\Helpers;
 class SodiumCrypto
 {
     /**
-     * Busca Chave de criptografia
+     * Searchers for the cryptographic key in the configuration.
      * @param string $config_key_encrypt
      * @return string
      */
@@ -19,7 +19,7 @@ class SodiumCrypto
     }
 
      /**
-     * Criptografa um valor
+     * Encrypts a value using the Sodium library.
      * @param string $value
      * @param string $value
      * @return string
@@ -32,7 +32,7 @@ class SodiumCrypto
     }
     
     /**
-     * Descriptografa um valor
+     * Decrypts a value using the Sodium library.
      * @param string $cipher_text
      * @param string $key
      * @return string
@@ -46,7 +46,7 @@ class SodiumCrypto
     }
 
     /**
-     * Gera um hash HMAC para o valor
+     * Generates a HMAC hash for the value.
      * @param string $value
      * @param string $index_key
      * @return string

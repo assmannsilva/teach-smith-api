@@ -17,7 +17,6 @@ class StudentService {
         protected UserRepositoryInterface $userRepository,
         protected StudentRepositoryInterface $studentRepository,
         protected ClassroomRepositoryInterface $classroomRepository,
-        protected InviteUserService $inviteUserService
     ) { }
 
 
@@ -63,13 +62,5 @@ class StudentService {
         });
 
         return $student_transaction;
-    }
-
-    public function inviteStudents(UploadedFile|array $import_data)
-    {
-        return $this->inviteUserService->dispatchInvites(
-            $import_data,
-            Student::class
-        );
     }
 }
