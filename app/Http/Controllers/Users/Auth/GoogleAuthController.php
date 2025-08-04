@@ -101,7 +101,12 @@ class GoogleAuthController extends Controller
         UserService $user_service
     ) {
         $user = $user_service->findByCriptedState($request->input("state"));
-        $user = $this->authService->registerInvitedUser($user,$request->input("code"),$this->strategy);
+        $user = $this->authService->registerInvitedUser(
+            $user,
+            $request->input("code"),
+            $request->input("state"),
+            $this->strategy
+        );
         return \response()->json([
             "message" => "User registered successfully",
             "user" => $user

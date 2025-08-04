@@ -21,6 +21,7 @@ Route::prefix('google-auth')->controller(GoogleAuthController::class)->group(fun
 
 Route::prefix('standard-auth')->controller(StandardAuthController::class)->group(function () {
     Route::post('/register', 'register')->name('auth.register');
+    Route::post('/register-invited', 'registerWithInvite')->name('auth.register.invited');
     Route::post('/login', 'authenticate')->name('auth.login');
 });
 

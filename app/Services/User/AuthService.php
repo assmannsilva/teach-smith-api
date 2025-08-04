@@ -59,10 +59,11 @@ class AuthService
     public function registerInvitedUser(
         User $user,
         string $new_credential,
+        ?string $state,
         AuthStrategyInterface $auth_strategy
     ) : User
     {
-        $user = $auth_strategy->makeRegistration($user, $new_credential);
+        $user = $auth_strategy->makeRegistration($user, $new_credential, $state);
         return $user;
     } 
 

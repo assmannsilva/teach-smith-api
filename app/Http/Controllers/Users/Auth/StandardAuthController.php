@@ -3,10 +3,13 @@
 namespace App\Http\Controllers\Users\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Users\StandardCompleteInviteRegistration;
 use App\Http\Requests\Users\StandardLoginRequest;
 use App\Http\Requests\Users\StandardRegistrationRequest;
 use App\Lib\AuthStrategy\StandardAuthStrategy;
+use App\Repositories\Interfaces\UserRepositoryInterface;
 use App\Services\User\AuthService;
+use Illuminate\Http\JsonResponse;
 
 class StandardAuthController extends Controller
 {
@@ -20,7 +23,7 @@ class StandardAuthController extends Controller
      * @param StandardLoginRequest $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function authenticate(StandardLoginRequest $request)
+    public function authenticate(StandardLoginRequest $request) : JsonResponse
     {
         $credentials = $request->only('email', 'password');
         $authenticated = $this->authService->authenticate($credentials,$this->strategy);
@@ -35,12 +38,31 @@ class StandardAuthController extends Controller
      * @param StandardRegistrationRequest $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function register(StandardRegistrationRequest $request)
+    public function register(StandardRegistrationRequest $request): JsonResponse
     {
         $credential = $request->input("password");
         $registration_data = $request->except("password");
         $user_registrated = $this->authService->register(
             $registration_data,
+            $credential,
+            null,
+            $this->strategy
+        );
+
+        return \response()->json([
+            "message" => "User registered successfully",
+            "user" => $user_registrated
+        ],201);
+    }
+
+    public function registerWithInvite(
+        StandardCompleteInviteRegistration $request,
+        UserRepositoryInterface $userRepository
+    ) {
+        $user = $userRepository->find($request->input("user_id"));
+        $credential = $request->input("password");
+        $user_registrated = $this->authService->registerInvitedUser(
+            $user,
             $credential,
             null,
             $this->strategy
