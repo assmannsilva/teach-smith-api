@@ -6,7 +6,7 @@ use Intervention\Image\Laravel\Facades\Image;
 
 class LogoFileProcessorService {
 
-    const IMAGE_LOGOS_STORE_PATH = 'logos/';
+    const IMAGE_LOGOS_STORE_PATH = '/';
     const IMAGE_LOGO_SIZE = 300;
 
     /**
